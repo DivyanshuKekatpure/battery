@@ -17,6 +17,8 @@ git switch -c revisit-D009 decision-D008   # new branch at that point; nothing l
 
 | ID | Phase | Decision | Options considered | Return point |
 |---|---|---|---|---|
+| D016 | 5 | You will fill `data/cost_inputs.csv` yourself (values + citations). Apple's price pages load prices by JavaScript, so they could not be read or verified here. | You fill it / paste values / save pages as PDFs | `phase5-ready` |
+| D015 | 5 | Phase 5 compares normal fast charging (3C, CC-CV, 100%) with all alternatives: 80% limit, multistage, slower 2C and slower 1C. Limit and multistage have no modelled life effect, so only charger costs can differ for them. One charger-cost row per strategy. | Slower charging / multistage / 80% limit / all | `phase5-ready` |
 | D014 | Process | Update the decision log (this file and the Claude Doc) and push to GitHub after every phase. | — | `phase5-prep` |
 | D013 | 4 | Phase 4 results approved; D011 approved by "go ahead"; start Phase 5. | Approve / revise | `phase4-analysis` |
 | D012 | Repo | Push Phases 1–4 and decision tags to GitHub. | — | `phase4-analysis` |
@@ -34,7 +36,6 @@ git switch -c revisit-D009 decision-D008   # new branch at that point; nothing l
 
 ## Open items
 
-- [ ] `data/cost_inputs.csv` with a value and citation for every row of `outputs/cost_inputs_TEMPLATE.csv` (low/high optional, used for sensitivity)
-- [ ] Choose the "after" strategy for Phase 5 (80% limit, multistage, or a slower charge rate)
+- [ ] `data/cost_inputs.csv` with a value and citation for every row of `outputs/cost_inputs_TEMPLATE.csv` (10 rows; low/high optional, used for sensitivity)
 - [ ] Add Diao 2019, Saxena 2016, Huang 2019, Keil & Jossen 2016, Liu & Luo 2010 PDFs
 - [ ] Choose how to read the CALCE PL data: MATLAB export, custom parser, or Saxena's printed numbers

@@ -1,8 +1,11 @@
 item,value,low,high,unit,source_citation,location_in_source
 battery_replacement_price,,,,USD per replacement,,
 service_cost_per_replacement,,,,USD per replacement,,
-charger_cost_before,,,,USD,,
-charger_cost_after,,,,USD,,
+charger_cost_normal_fast,,,,USD,,
+charger_cost_limit_80pct,,,,USD,,
+charger_cost_multistage,,,,USD,,
+charger_cost_slow_2C,,,,USD,,
+charger_cost_slow_1C,,,,USD,,
 device_cost,,,,USD,,
 cycles_per_year,,,,equivalent full cycles per year,,
 ownership_years,,,,years,,

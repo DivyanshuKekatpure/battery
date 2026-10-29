@@ -1,3 +1,2 @@
-Phase 5 financial module. SEED=20261028, B=2000
-STOP: the recommended change (the 'after' strategy) has not been chosen. Options: limit_80pct, multistage, or a slower charge rate scenario.
-STOP: data/cost_inputs.csv does not exist. Required rows: battery_replacement_price, service_cost_per_replacement, charger_cost_before, charger_cost_after, device_cost, cycles_per_year, ownership_years
+Phase 5 financial module. SEED=20261028, B=2000; before=normal_fast; after=limit_80pct, multistage, slow_2C, slow_1C
+STOP: data/cost_inputs.csv does not exist. Required rows: battery_replacement_price, service_cost_per_replacement, charger_cost_normal_fast, charger_cost_limit_80pct, charger_cost_multistage, charger_cost_slow_2C, charger_cost_slow_1C, device_cost, cycles_per_year, ownership_years

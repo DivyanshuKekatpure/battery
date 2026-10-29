@@ -20,18 +20,25 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from analyze import STRATEGIES, pick  # noqa: E402
+from analyze import STRATEGIES as P4_STRATEGIES, pick  # noqa: E402
 from extract_summary import OUT_DIR, ROOT, Report, write_csv  # noqa: E402
 
 SEED = 20261028
 B_BOOT = 2000
 COST_FILE = os.path.join(ROOT, "data", "cost_inputs.csv")
+# Phase 4 strategies plus slower charging (decision D015: compare all against normal_fast)
+STRATEGIES = dict(P4_STRATEGIES,
+                  slow_2C={"charge_rate_C": 2.0, "ambient_C": 25, "charge_limit_pct": 100, "method": "CCCV"},
+                  slow_1C={"charge_rate_C": 1.0, "ambient_C": 25, "charge_limit_pct": 100, "method": "CCCV"})
+BEFORE = "normal_fast"
+AFTERS = ["limit_80pct", "multistage", "slow_2C", "slow_1C"]
+NOT_MODELLED_LIFE = {"limit_80pct", "multistage"}
 TABLES = os.path.join(OUT_DIR, "tables")
 REQUIRED = {
     "battery_replacement_price": "USD per replacement",
     "service_cost_per_replacement": "USD per replacement (labour, shipping, or 0 if included; cite it)",
-    "charger_cost_before": "USD, charger used before the change",
-    "charger_cost_after": "USD, charger used after the change",
+    **{f"charger_cost_{k}": f"USD, charger used for {k}" for k in ["normal_fast", "limit_80pct", "multistage",
+                                                                    "slow_2C", "slow_1C"]},
     "device_cost": "USD (used only in the replace-the-phone sensitivity case)",
     "cycles_per_year": "equivalent full cycles per year of phone use",
     "ownership_years": "years of ownership",
@@ -83,16 +90,16 @@ def replacements(lives, horizon, rng, n_owners):
     return counts
 
 
-def ownership_cost(counts, cost, when, replace_phone=False):
+def ownership_cost(counts, cost, strategy, replace_phone=False):
     per_event = cost["device_cost"] if replace_phone else (cost["battery_replacement_price"] +
                                                            cost["service_cost_per_replacement"])
-    return cost[f"charger_cost_{when}"] + counts * per_event
+    return cost[f"charger_cost_{strategy}"] + counts * per_event
 
 
-def qi(counts_before, counts_after, cost, rng, replace_phone=False):
+def qi(counts_before, counts_after, cost, rng, replace_phone=False, before_s=BEFORE, after_s="slow_1C"):
     """Bootstrap the difference in mean ownership cost (after - before) over simulated owners."""
-    before = ownership_cost(counts_before, cost, "before", replace_phone)
-    after = ownership_cost(counts_after, cost, "after", replace_phone)
+    before = ownership_cost(counts_before, cost, before_s, replace_phone)
+    after = ownership_cost(counts_after, cost, after_s, replace_phone)
     n = len(before)
     idx = rng.integers(0, n, size=(B_BOOT, n))
     boots = after[idx].mean(1) - before[idx].mean(1)
@@ -101,46 +108,50 @@ def qi(counts_before, counts_after, cost, rng, replace_phone=False):
             "ci_lo": float(np.percentile(boots, 2.5)), "ci_hi": float(np.percentile(boots, 97.5))}
 
 
-def main(before="normal_fast", after=None):
+def main():
     rep = Report()
     os.makedirs(TABLES, exist_ok=True)
-    rep(f"Phase 5 financial module. SEED={SEED}, B={B_BOOT}")
-    if after is None:
-        rep("STOP: the recommended change (the 'after' strategy) has not been chosen. Options: "
-            + ", ".join(k for k in STRATEGIES if k != before) + ", or a slower charge rate scenario.")
+    rep(f"Phase 5 financial module. SEED={SEED}, B={B_BOOT}; before={BEFORE}; after={', '.join(AFTERS)}")
     cost = load_costs(rep)
-    if cost is None or after is None:
+    if cost is None:
         rep.save(os.path.join(OUT_DIR, "financial_report.txt"))
         return 1
 
     rng = np.random.default_rng(SEED)
     sim = pd.read_csv(os.path.join(OUT_DIR, "sim_results.csv"))
-    lives = {k: pick(sim, STRATEGIES[k])["cycles_to_80pct_health"].to_numpy() for k in (before, after)}
-    horizon = cost["cycles_per_year"]["value"] * cost["ownership_years"]["value"]
-    n = len(lives[before])
-    point = {k: {f: v["value"] for f, v in cost.items()} for k in ["base"]}["base"]
-    counts = {k: replacements(lives[k], horizon, rng, n) for k in lives}
-    rep(f"Horizon = {horizon:g} cycles; mean replacements: {before}={counts[before].mean():.3f}, "
-        f"{after}={counts[after].mean():.3f}")
+    lives = {k: pick(sim, STRATEGIES[k])["cycles_to_80pct_health"].to_numpy() for k in [BEFORE] + AFTERS}
+    point = {k: v["value"] for k, v in cost.items()}
+    n = len(lives[BEFORE])
 
-    res = [{"case": "battery replacement", **qi(counts[before], counts[after], point, rng)},
-           {"case": "phone replacement", **qi(counts[before], counts[after], point, rng, replace_phone=True)}]
-    write_csv(pd.DataFrame(res), os.path.join(TABLES, "p5_ownership_cost.csv"))
-    rep(pd.DataFrame(res).round(2).to_string(index=False))
+    def run(c):
+        horizon = c["cycles_per_year"] * c["ownership_years"]
+        counts = {k: replacements(lives[k], horizon, rng, n) for k in lives}
+        out = []
+        for a in AFTERS:
+            for phone in (False, True):
+                out.append({"after": a, "case": "phone replacement" if phone else "battery replacement",
+                            "horizon_cycles": horizon, "mean_replacements_before": counts[BEFORE].mean(),
+                            "mean_replacements_after": counts[a].mean(),
+                            "life_effect_modelled": a not in NOT_MODELLED_LIFE,
+                            **qi(counts[BEFORE], counts[a], c, rng, phone, BEFORE, a)})
+        return out
+
+    res = pd.DataFrame(run(point))
+    write_csv(res, os.path.join(TABLES, "p5_ownership_cost.csv"))
+    rep(res.round(3).to_string(index=False))
+    rep("limit_80pct and multistage: life effect not modelled (D009), so only charger costs can differ.")
 
     sens = []
     for item, v in cost.items():
         for bound in ("low", "high"):
-            if np.isnan(v[bound]):
-                continue
-            c2 = dict(point, **{item: v[bound]})
-            h2 = c2["cycles_per_year"] * c2["ownership_years"]
-            cnt = counts if h2 == horizon else {k: replacements(lives[k], h2, rng, n) for k in lives}
-            sens.append({"item": item, "bound": bound, "input_value": v[bound],
-                         **qi(cnt[before], cnt[after], c2, rng)})
+            if not np.isnan(v[bound]):
+                for r in run(dict(point, **{item: v[bound]})):
+                    sens.append({"item": item, "bound": bound, "input_value": v[bound], **r})
     if sens:
-        write_csv(pd.DataFrame(sens), os.path.join(TABLES, "p5_sensitivity.csv"))
-        rep(pd.DataFrame(sens)[["item", "bound", "input_value", "difference", "ci_lo", "ci_hi"]].round(2).to_string(index=False))
+        sens = pd.DataFrame(sens)
+        write_csv(sens, os.path.join(TABLES, "p5_sensitivity.csv"))
+        rep(sens[["item", "bound", "input_value", "after", "case", "difference", "ci_lo", "ci_hi"]].round(2)
+            .to_string(index=False))
     else:
         rep("No low/high ranges supplied in cost_inputs.csv, so no sensitivity analysis was run.")
     rep.save(os.path.join(OUT_DIR, "financial_report.txt"))
@@ -148,4 +159,4 @@ def main(before="normal_fast", after=None):
 
 
 if __name__ == "__main__":
-    sys.exit(main(after=sys.argv[1] if len(sys.argv) > 1 else None))
+    sys.exit(main())
