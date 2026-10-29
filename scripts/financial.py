@@ -75,8 +75,14 @@ def load_costs(rep):
             for k in REQUIRED}
 
 
-def replacements(lives, horizon, rng, n_owners):
-    """Renewal process: count end-of-life events within `horizon` cycles per simulated owner."""
+def replacements(lives, horizon, seed, n_owners):
+    """Renewal process: count end-of-life events within `horizon` cycles per simulated owner.
+
+    A fresh generator from `seed` on every call gives common random numbers: every strategy and
+    every sensitivity case resamples the same battery indices, so identical lives give identical
+    counts and differences between strategies are not resampling noise.
+    """
+    rng = np.random.default_rng(seed)
     counts = np.zeros(n_owners, int)
     used = np.zeros(n_owners)
     alive = np.ones(n_owners, bool)
@@ -117,7 +123,6 @@ def main():
         rep.save(os.path.join(OUT_DIR, "financial_report.txt"))
         return 1
 
-    rng = np.random.default_rng(SEED)
     sim = pd.read_csv(os.path.join(OUT_DIR, "sim_results.csv"))
     lives = {k: pick(sim, STRATEGIES[k])["cycles_to_80pct_health"].to_numpy() for k in [BEFORE] + AFTERS}
     point = {k: v["value"] for k, v in cost.items()}
@@ -125,7 +130,7 @@ def main():
 
     def run(c):
         horizon = c["cycles_per_year"] * c["ownership_years"]
-        counts = {k: replacements(lives[k], horizon, rng, n) for k in lives}
+        counts = {k: replacements(lives[k], horizon, SEED + 1, n) for k in lives}
         out = []
         for a in AFTERS:
             for phone in (False, True):
@@ -133,7 +138,7 @@ def main():
                             "horizon_cycles": horizon, "mean_replacements_before": counts[BEFORE].mean(),
                             "mean_replacements_after": counts[a].mean(),
                             "life_effect_modelled": a not in NOT_MODELLED_LIFE,
-                            **qi(counts[BEFORE], counts[a], c, rng, phone, BEFORE, a)})
+                            **qi(counts[BEFORE], counts[a], c, np.random.default_rng(SEED + 2), phone, BEFORE, a)})
         return out
 
     res = pd.DataFrame(run(point))

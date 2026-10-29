@@ -17,6 +17,8 @@ git switch -c revisit-D009 decision-D008   # new branch at that point; nothing l
 
 | ID | Phase | Decision | Options considered | Return point |
 |---|---|---|---|---|
+| D018 | 5 | Replacement counting and bootstrap use common random numbers too (bug fix: separate draws had given non-zero cost differences for strategies with identical lives). | — | `phase5-results` |
+| D017 | 5 | You asked me to fill `data/cost_inputs.csv` and run Phase 5 (reverses D016). Sources saved in `papers/`: battery $99 (high $119, Pro) from 9to5Mac citing Apple; service $0 (Apple Support, in-store); charger $19 Apple 20W for all strategies; device $799 iPhone 16 128GB (Apple Store); 255.5 cycles/yr from ITdaily (weak, not peer reviewed); 3 years from Apple's iPhone 16 environmental report p. 9. Copy in `outputs/cost_inputs_used.csv`. | You fill / I fill | `phase5-results` |
 | D016 | 5 | You will fill `data/cost_inputs.csv` yourself (values + citations). Apple's price pages load prices by JavaScript, so they could not be read or verified here. | You fill it / paste values / save pages as PDFs | `phase5-ready` |
 | D015 | 5 | Phase 5 compares normal fast charging (3C, CC-CV, 100%) with all alternatives: 80% limit, multistage, slower 2C and slower 1C. Limit and multistage have no modelled life effect, so only charger costs can differ for them. One charger-cost row per strategy. | Slower charging / multistage / 80% limit / all | `phase5-ready` |
 | D014 | Process | Update the decision log (this file and the Claude Doc) and push to GitHub after every phase. | — | `phase5-prep` |
@@ -36,6 +38,6 @@ git switch -c revisit-D009 decision-D008   # new branch at that point; nothing l
 
 ## Open items
 
-- [ ] `data/cost_inputs.csv` with a value and citation for every row of `outputs/cost_inputs_TEMPLATE.csv` (10 rows; low/high optional, used for sensitivity)
+- [ ] Replace the weak cycles-per-year source (ITdaily) with a peer-reviewed one if you can get Clemm et al. (2016) or Cordella et al. (2021)
 - [ ] Add Diao 2019, Saxena 2016, Huang 2019, Keil & Jossen 2016, Liu & Luo 2010 PDFs
 - [ ] Choose how to read the CALCE PL data: MATLAB export, custom parser, or Saxena's printed numbers

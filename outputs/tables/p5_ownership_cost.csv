@@ -1,0 +1,9 @@
+after,case,horizon_cycles,mean_replacements_before,mean_replacements_after,life_effect_modelled,mean_before,mean_after,difference,boot_median,boot_se,ci_lo,ci_hi
+limit_80pct,battery replacement,766.5,0.062,0.062,False,25.138,25.138,0.0,0.0,0.0,0.0,0.0
+limit_80pct,phone replacement,766.5,0.062,0.062,False,68.538,68.538,0.0,0.0,0.0,0.0,0.0
+multistage,battery replacement,766.5,0.062,0.062,False,25.138,25.138,0.0,0.0,0.0,0.0,0.0
+multistage,phone replacement,766.5,0.062,0.062,False,68.538,68.538,0.0,0.0,0.0,0.0,0.0
+slow_2C,battery replacement,766.5,0.062,0.016,True,25.138,20.584,-4.554000000000002,-4.5539999999999985,0.6589121750923961,-5.841000000000001,-3.3659999999999997
+slow_2C,phone replacement,766.5,0.062,0.016,True,68.538,31.784,-36.754,-36.754,5.317887150493177,-47.141,-27.165999999999997
+slow_1C,battery replacement,766.5,0.062,0.003,True,25.138,19.297,-5.841000000000001,-5.8409999999999975,0.7383832139174397,-7.3260000000000005,-4.454999999999998
+slow_1C,phone replacement,766.5,0.062,0.003,True,68.538,21.397,-47.141,-47.141,5.959274625454892,-59.126,-35.955

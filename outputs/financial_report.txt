@@ -1,2 +1,20 @@
 Phase 5 financial module. SEED=20261028, B=2000; before=normal_fast; after=limit_80pct, multistage, slow_2C, slow_1C
-STOP: data/cost_inputs.csv does not exist. Required rows: battery_replacement_price, service_cost_per_replacement, charger_cost_normal_fast, charger_cost_limit_80pct, charger_cost_multistage, charger_cost_slow_2C, charger_cost_slow_1C, device_cost, cycles_per_year, ownership_years
+      after                case  horizon_cycles  mean_replacements_before  mean_replacements_after  life_effect_modelled  mean_before  mean_after  difference  boot_median  boot_se   ci_lo   ci_hi
+limit_80pct battery replacement           766.5                     0.062                    0.062                 False       25.138      25.138       0.000        0.000    0.000   0.000   0.000
+limit_80pct   phone replacement           766.5                     0.062                    0.062                 False       68.538      68.538       0.000        0.000    0.000   0.000   0.000
+ multistage battery replacement           766.5                     0.062                    0.062                 False       25.138      25.138       0.000        0.000    0.000   0.000   0.000
+ multistage   phone replacement           766.5                     0.062                    0.062                 False       68.538      68.538       0.000        0.000    0.000   0.000   0.000
+    slow_2C battery replacement           766.5                     0.062                    0.016                  True       25.138      20.584      -4.554       -4.554    0.659  -5.841  -3.366
+    slow_2C   phone replacement           766.5                     0.062                    0.016                  True       68.538      31.784     -36.754      -36.754    5.318 -47.141 -27.166
+    slow_1C battery replacement           766.5                     0.062                    0.003                  True       25.138      19.297      -5.841       -5.841    0.738  -7.326  -4.455
+    slow_1C   phone replacement           766.5                     0.062                    0.003                  True       68.538      21.397     -47.141      -47.141    5.959 -59.126 -35.955
+limit_80pct and multistage: life effect not modelled (D009), so only charger costs can differ.
+                     item bound  input_value       after                case  difference  ci_lo  ci_hi
+battery_replacement_price  high        119.0 limit_80pct battery replacement        0.00   0.00   0.00
+battery_replacement_price  high        119.0 limit_80pct   phone replacement        0.00   0.00   0.00
+battery_replacement_price  high        119.0  multistage battery replacement        0.00   0.00   0.00
+battery_replacement_price  high        119.0  multistage   phone replacement        0.00   0.00   0.00
+battery_replacement_price  high        119.0     slow_2C battery replacement       -5.47  -7.02  -4.05
+battery_replacement_price  high        119.0     slow_2C   phone replacement      -36.75 -47.14 -27.17
+battery_replacement_price  high        119.0     slow_1C battery replacement       -7.02  -8.81  -5.36
+battery_replacement_price  high        119.0     slow_1C   phone replacement      -47.14 -59.13 -35.96

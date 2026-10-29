@@ -1,0 +1,9 @@
+item,bound,input_value,after,case,horizon_cycles,mean_replacements_before,mean_replacements_after,life_effect_modelled,mean_before,mean_after,difference,boot_median,boot_se,ci_lo,ci_hi
+battery_replacement_price,high,119.0,limit_80pct,battery replacement,766.5,0.062,0.062,False,26.378,26.378,0.0,0.0,0.0,0.0,0.0
+battery_replacement_price,high,119.0,limit_80pct,phone replacement,766.5,0.062,0.062,False,68.538,68.538,0.0,0.0,0.0,0.0,0.0
+battery_replacement_price,high,119.0,multistage,battery replacement,766.5,0.062,0.062,False,26.378,26.378,0.0,0.0,0.0,0.0,0.0
+battery_replacement_price,high,119.0,multistage,phone replacement,766.5,0.062,0.062,False,68.538,68.538,0.0,0.0,0.0,0.0,0.0
+battery_replacement_price,high,119.0,slow_2C,battery replacement,766.5,0.062,0.016,True,26.378,20.904,-5.474,-5.474,0.7920257458181327,-7.021000000000001,-4.045999999999999
+battery_replacement_price,high,119.0,slow_2C,phone replacement,766.5,0.062,0.016,True,68.538,31.784,-36.754,-36.754,5.317887150493177,-47.141,-27.165999999999997
+battery_replacement_price,high,119.0,slow_1C,battery replacement,766.5,0.062,0.003,True,26.378,19.357,-7.021000000000001,-7.021000000000001,0.8875515399613668,-8.806000000000001,-5.355
+battery_replacement_price,high,119.0,slow_1C,phone replacement,766.5,0.062,0.003,True,68.538,21.397,-47.141,-47.141,5.959274625454892,-59.126,-35.955
