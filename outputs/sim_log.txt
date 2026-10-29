@@ -1,0 +1,12 @@
+SEED=20261028 (numpy default_rng); N_BATTERIES=1000; scenarios=36; common random numbers
+beta=2.595, eta_ref=820.2 at 4.74C, b=-0.5309 (CI (-0.7232, -0.3387)), k~N(1.061, 0.0879)
+Wrote outputs/sim_results.csv: 36,000 rows
+Wrote outputs/sim_results_sensitivity.csv: 108,000 rows (b at CI bounds and point)
+                      median_life  mean_t80  past_eol_500  past_eol_1000
+charge_rate_C method                                                    
+1.0           CCCV      5236.6686   51.1323         0.000          0.009
+              MSCC      5236.6686   46.3770         0.000          0.009
+2.0           CCCV      3079.5563   25.5661         0.004          0.031
+              MSCC      3079.5563   23.1885         0.004          0.031
+3.0           CCCV      1811.0115   17.0441         0.018          0.132
+              MSCC      1811.0115   15.4590         0.018          0.132

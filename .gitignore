@@ -6,3 +6,4 @@ outputs/*.h5
 outputs/*.tmp
 __pycache__/
 papers/
+outputs/sim_results_sensitivity.csv
