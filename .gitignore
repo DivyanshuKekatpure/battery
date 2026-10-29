@@ -5,3 +5,4 @@ outputs/*.mat
 outputs/*.h5
 outputs/*.tmp
 __pycache__/
+papers/

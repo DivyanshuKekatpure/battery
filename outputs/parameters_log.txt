@@ -1,0 +1,13 @@
+Phase 1 parameter build. SEED=20261028 (no random draws in this phase).
+Severson log(cycle life) ~ avg charge rate to 80%: n=124, slope=-0.4599 [-0.6576, -0.2621] per C, R2=0.148, p=1.02e-05, tested rates 3.18-5.34 C
+CC time-to-80% ratio measured/(48/C): n=21, mean=1.0611, rates=[np.float64(3.6), np.float64(4.0), np.float64(4.4), np.float64(4.8), np.float64(5.4)]
+Severson charge-phase temperature rise ~ rate: n=124, slope=1.053 C/C-rate, R2=0.073; mean rise=2.81 degC
+Severson Weibull regression: beta=2.595, eta at 4.74C=820.2, b=-0.5309 (SE 0.0981), converged=True
+Severson normalised fade curve: 124 cells; health at f=0 0.9720, f=0.5 0.9579, f=1 0.8002
+Diao DOE_Cap: 24 conditions x 8 cells; each entry (cycle, capacity)
+Wrote outputs/parameters.csv: 86 rows (29 verified, 57 not verified)
+NOTE: condition 3: excluded cell 8 (1 valid points) (no data after cycle 0)
+NOTE: condition 4: excluded cell 7 (1 valid points) (no data after cycle 0)
+NOTE: condition 6: excluded cell 2 (1 valid points) (no data after cycle 0)
+NOTE: condition 23: excluded cell 4 (1 valid points), cell 5 (1 valid points), cell 6 (1 valid points), cell 7 (1 valid points), cell 8 (1 valid points) (no data after cycle 0)
+NOTE: condition 24: excluded cell 4 (1 valid points), cell 5 (1 valid points), cell 6 (1 valid points), cell 7 (1 valid points), cell 8 (1 valid points) (no data after cycle 0)
