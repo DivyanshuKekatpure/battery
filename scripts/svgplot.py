@@ -58,8 +58,8 @@ class Plot:
     def errorbars(self, x, y, lo, hi, label=None, color=None):
         self._add("err", x=list(x), y=list(y), lo=list(lo), hi=list(hi), label=label, color=color)
 
-    def hline(self, y, label=None, color=MUTED, dash="6,4"):
-        self._add("hline", y=y, label=label, color=color, dash=dash)
+    def hline(self, y, label=None, color=MUTED, dash="6,4", side="right"):
+        self._add("hline", y=y, label=label, color=color, dash=dash, side=side)
 
     def _add(self, kind, **kw):
         if kw.get("color") is None:
@@ -123,7 +123,8 @@ class Plot:
             if it["kind"] == "hline":
                 o.append(f'<line x1="{L}" x2="{R}" y1="{sy(it["y"]):.1f}" y2="{sy(it["y"]):.1f}" stroke="{c}" stroke-width="1.6" stroke-dasharray="{it["dash"]}"/>')
                 if it["label"]:
-                    o.append(f'<text x="{R - 6}" y="{sy(it["y"]) - 6:.1f}" font-size="13" text-anchor="end" fill="{c}">{html.escape(it["label"])}</text>')
+                    lx, anchor = (R - 6, "end") if it.get("side", "right") == "right" else (L + 6, "start")
+                    o.append(f'<text x="{lx}" y="{sy(it["y"]) - 6:.1f}" font-size="13" text-anchor="{anchor}" fill="{c}">{html.escape(it["label"])}</text>')
             elif it["kind"] == "line":
                 pts = " ".join(f"{sx(a):.1f},{sy(b):.1f}" for a, b in zip(it["x"], it["y"]) if b is not None and math.isfinite(b))
                 dash = f' stroke-dasharray="{it["dash"]}"' if it["dash"] else ""

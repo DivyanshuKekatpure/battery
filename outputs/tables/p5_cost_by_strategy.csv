@@ -1,0 +1,6 @@
+strategy,label,mean_replacements,cost_battery_case,cost_battery_ci_lo,cost_battery_ci_hi,cost_phone_case,cost_phone_ci_lo,cost_phone_ci_hi,share_with_replacement,share_ci_lo,share_ci_hi
+normal_fast,"Fast 3C (CC-CV, 100%)",0.062,25.138,23.752,26.524,68.538,57.352,79.724,0.062,0.048,0.076
+limit_80pct,80% limit (3C),0.062,25.138,23.752,26.524,68.538,57.352,79.724,0.062,0.048,0.076
+multistage,Multistage (3C),0.062,25.138,23.752,26.524,68.538,57.352,79.724,0.062,0.048,0.076
+slow_2C,Slower 2C,0.016,20.584,19.891,21.376,31.784,26.191,38.176,0.016,0.009,0.024
+slow_1C,Slower 1C,0.003,19.297,19.0,19.693,21.397,19.0,24.593,0.003,0.0,0.007

@@ -17,6 +17,7 @@ git switch -c revisit-D009 decision-D008   # new branch at that point; nothing l
 
 | ID | Phase | Decision | Options considered | Return point |
 |---|---|---|---|---|
+| D019 | Reports | Financial figures (outputs/figures/p5_*) and three course deliverables as Word files in outputs/reports/: Preliminary Methods and Results, Financial Impacts, Rough Draft. Charter, SIPOC, process map, VOC tree and research design are left as marked placeholders (templates from earlier assignments). Recommended change named in the reports: default to 2C charging. | — | `reports-v1` |
 | D018 | 5 | Replacement counting and bootstrap use common random numbers too (bug fix: separate draws had given non-zero cost differences for strategies with identical lives). | — | `phase5-results` |
 | D017 | 5 | You asked me to fill `data/cost_inputs.csv` and run Phase 5 (reverses D016). Sources saved in `papers/`: battery $99 (high $119, Pro) from 9to5Mac citing Apple; service $0 (Apple Support, in-store); charger $19 Apple 20W for all strategies; device $799 iPhone 16 128GB (Apple Store); 255.5 cycles/yr from ITdaily (weak, not peer reviewed); 3 years from Apple's iPhone 16 environmental report p. 9. Copy in `outputs/cost_inputs_used.csv`. | You fill / I fill | `phase5-results` |
 | D016 | 5 | You will fill `data/cost_inputs.csv` yourself (values + citations). Apple's price pages load prices by JavaScript, so they could not be read or verified here. | You fill it / paste values / save pages as PDFs | `phase5-ready` |
@@ -38,6 +39,7 @@ git switch -c revisit-D009 decision-D008   # new branch at that point; nothing l
 
 ## Open items
 
+- [ ] Paste the Project Charter, SIPOC, process map, VOC tree and research design into `outputs/reports/Rough_Draft.docx`; add team names
 - [ ] Replace the weak cycles-per-year source (ITdaily) with a peer-reviewed one if you can get Clemm et al. (2016) or Cordella et al. (2021)
 - [ ] Add Diao 2019, Saxena 2016, Huang 2019, Keil & Jossen 2016, Liu & Luo 2010 PDFs
 - [ ] Choose how to read the CALCE PL data: MATLAB export, custom parser, or Saxena's printed numbers

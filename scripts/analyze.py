@@ -298,8 +298,8 @@ def main():
     pl.categorical_x(["1C", "2C", "3C"])
     pl.boxes([0, 1, 2], [box_stats(df[(df.charge_rate_C == r) & (df.scenario_id % 4 == 1)]["cycles_to_80pct_health"])
                          for r in (1.0, 2.0, 3.0)], color="#2563eb")
-    pl.hline(1000, label="Apple 1000 (iPhone 15 models)", color="#16a34a")
-    pl.hline(500, label="Apple 500 (iPhone 14 and earlier)", color="#dc2626")
+    pl.hline(1000, label="Apple rating: 1000 (iPhone 15 models)", color="#16a34a")
+    pl.hline(500, label="Apple rating: 500 (iPhone 14 and earlier)", color="#dc2626", side="left")
     pl.save(os.path.join(FIGS, "p4_1_life_by_rate.png"))
     m = df.groupby(["charge_rate_C", "method"])["minutes_to_80pct"].mean().unstack()
     pl = Plot("Mean minutes to 80% charge: rate x method", "Charge rate", "Minutes to 80% charge",

@@ -35,7 +35,7 @@ longer than Apple's ratings.
 | Cycles to 80% | F = 16,153, **0.473** | 0 | 0 | 0 |
 | Log cycles to 80% | F = 15,250, **0.459** | 0 | 0 | 0 |
 | Health at 500 | F = 2,037, **0.102** | 0 | 0 | 0 |
-| Health at 1000 | F = 4,573, **0.213** | 0 | 0 | 0 |
+| Health at 1000 | F = 4,573, **0.212** | 0 | 0 | 0 |
 
 A zero means the factor has **no verified life effect and isn't modelled**. It is not evidence of no
 effect. The ambient effect on charge time exists only because 40 °C uses Tahir's 35 °C multistage
