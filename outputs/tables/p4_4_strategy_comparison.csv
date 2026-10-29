@@ -1,0 +1,5 @@
+comparison,quantity,difference,ci_lo,ci_hi
+limit_80pct - normal_fast,median cycles to 80%,0.0,0.0,0.0
+limit_80pct - normal_fast,median minutes to 80%,0.0,0.0,0.0
+multistage - normal_fast,median cycles to 80%,0.0,0.0,0.0
+multistage - normal_fast,median minutes to 80%,-1.746903557439726,-1.759148847839299,-1.7351531946502288

@@ -1,0 +1,2 @@
+strategy,n_batteries,n_past_eol_excluded,n_charted,center_mean,MR_bar,sigma_within,sigma_overall,UCL,LCL,points_beyond_limits,longest_run_one_side,stable_rule1_and_run8,LSL,rated_cycles_for_spec,Cp,Cpk,Pp,Ppk,observed_fraction_nonconforming,shapiro_p_first_500
+multistage,1000,18,982,0.9670958149341029,0.010763888134166833,0.00954245401965145,0.015948870241102964,0.9957231769930572,0.9384684528751486,33,16,False,0.8,500,,5.836926734289755,,3.492322912910123,0.018,1.6368508406980098e-35
