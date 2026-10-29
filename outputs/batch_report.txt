@@ -1,0 +1,149 @@
+Input files (4):
+  2017-05-12_batchdata_updated_struct_errorcorrect.mat  3,025,320,241 bytes
+  2017-06-30_batchdata_updated_struct_errorcorrect.mat  2,007,331,155 bytes
+  2018-04-12_batchdata_updated_struct_errorcorrect.mat  3,236,690,412 bytes
+  2019-01-24_batchdata_updated_struct_errorcorrect.mat  2,601,295,745 bytes
+Wrote outputs/cell_summary.csv (185 rows) and outputs/capacity_curves.csv
+Units: chargetime stored in minutes (inferred from magnitude, no unit metadata); T in degC; IR in ohm; capacity in Ah.
+
+==============================================================================
+1. Cells per batch
+==============================================================================
+2017-05-12: 46 cells
+2017-06-30: 48 cells
+2018-04-12: 46 cells
+2019-01-24: 45 cells
+TOTAL: 185 cells
+
+==============================================================================
+2. cycle_life vs cycle_life_check (first cycle with non-zero QDischarge < 0.88 Ah)
+==============================================================================
+Cells with both values: 88; disagreeing by > 5%: 2
+  b4c38   2019-01-24  cycle_life=1166  check=1056  recorded=1231  policy=5.2-5.2-4.8-4.16
+  b4c40   2019-01-24  cycle_life=1089  check=872  recorded=1123  policy=4.4-5.6-5.2-4.252
+Distribution of (cycle_life_check - cycle_life) among agreeing+disagreeing cells (top 10):
+  diff +0: 86 cells
+  diff -217: 1 cells
+  diff -110: 1 cells
+
+Cells with cycle_life BLANK in the file:
+  b3c23   2018-04-12  check=nan  recorded=2189  last QDischarge=0.9370 Ah
+  b3c32   2018-04-12  check=nan  recorded=2237  last QDischarge=0.9739 Ah
+
+Cells never below 0.88 Ah in the file but with a stored cycle_life: 95 (stored cycle_life == last recorded cycle + 1 for 95 of them)
+  (a) data ends just above 0.88 Ah (last value < 0.885), i.e. the file stops at the last cycle before EOL: 85 cells
+      b1c5, b1c6, b1c7, b1c9, b1c11, b1c14, b1c15, b1c16, b1c17, b1c18, b1c19, b1c20, b1c21, b1c23, b1c24, b1c25, b1c26, b1c27, b1c28, b1c29, b1c30, b1c31, b1c32, b1c33, b1c34, b1c35, b1c36, b1c37, b1c38, b1c39, b1c40, b1c41, b1c42, b1c43, b1c44, b1c45, b2c7, b2c8, b2c9, b2c15, b2c16, b3c0, b3c1, b3c2, b3c3, b3c4, b3c5, b3c6, b3c7, b3c8, b3c9, b3c10, b3c11, b3c12, b3c13, b3c14, b3c15, b3c16, b3c17, b3c18, b3c19, b3c20, b3c21, b3c22, b3c24, b3c25, b3c26, b3c27, b3c28, b3c29, b3c30, b3c31, b3c33, b3c34, b3c35, b3c36, b3c37, b3c38, b3c39, b3c40, b3c41, b3c42, b3c43, b3c44, b3c45
+  (b) data ends well above 0.88 Ah, so the stored cycle_life CANNOT be verified from this file's capacity data: 10 cells
+      b1c0    2017-05-12  cycle_life=1190  last cycle=1189  last QDischarge=1.0262 Ah  policy=3.6C(80%)-3.6C
+      b1c1    2017-05-12  cycle_life=1179  last cycle=1178  last QDischarge=1.0382 Ah  policy=3.6C(80%)-3.6C
+      b1c2    2017-05-12  cycle_life=1177  last cycle=1176  last QDischarge=1.0433 Ah  policy=3.6C(80%)-3.6C
+      b1c3    2017-05-12  cycle_life=1226  last cycle=1225  last QDischarge=0.9709 Ah  policy=4C(80%)-4C
+      b1c4    2017-05-12  cycle_life=1227  last cycle=1226  last QDischarge=1.0220 Ah  policy=4C(80%)-4C
+      b1c8    2017-05-12  cycle_life=879  last cycle=878  last QDischarge=0.9690 Ah  policy=5.4C(40%)-3.6C
+      b1c10   2017-05-12  cycle_life=906  last cycle=905  last QDischarge=0.9610 Ah  policy=5.4C(50%)-3C
+      b1c12   2017-05-12  cycle_life=902  last cycle=901  last QDischarge=0.9131 Ah  policy=5.4C(50%)-3.6C
+      b1c13   2017-05-12  cycle_life=897  last cycle=896  last QDischarge=0.9231 Ah  policy=5.4C(50%)-3.6C
+      b1c22   2017-05-12  cycle_life=891  last cycle=890  last QDischarge=0.9633 Ah  policy=6C(30%)-3.6C
+
+==============================================================================
+3. Missing / empty / all-NaN summary fields per batch (status per cell)
+==============================================================================
+2017-05-12 (46 cells):
+  Tmax       status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  Tavg       status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  chargetime status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  IR         status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 11
+  temperature_available: 46/46 cells
+2017-06-30 (48 cells):
+  Tmax       status counts={'ok': 48}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  Tavg       status counts={'ok': 48}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  chargetime status counts={'ok': 48}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  IR         status counts={'ok': 48}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  temperature_available: 48/48 cells
+2018-04-12 (46 cells):
+  Tmax       status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  Tavg       status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  chargetime status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  IR         status counts={'ok': 46}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  temperature_available: 46/46 cells
+2019-01-24 (45 cells):
+  Tmax       status counts={'ok': 45}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  Tavg       status counts={'ok': 45}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  chargetime status counts={'ok': 45}  cells with some exact 0 in cycles 2-100 (excluded from means): 0
+  IR         status counts={'all_zero': 45}  cells with some exact 0 in cycles 2-100 (excluded from means): 45
+  temperature_available: 45/45 cells
+
+==============================================================================
+4. cycle_life per batch (stored value, blanks excluded)
+==============================================================================
+            count    min  median    mean     max    std  n_blank
+batch                                                           
+2017-05-12     46  534.0   858.5   844.7  1227.0  184.6        0
+2017-06-30     48  148.0   483.0   494.7  1061.0  141.1        0
+2018-04-12     44  541.0  1005.5  1059.7  1935.0  313.9        2
+2019-01-24     45  443.0   774.0   774.7  1166.0  175.4        0
+
+==============================================================================
+5. Mean charge time and mean Tmax by step1_rate_C (cycles 2-100)
+==============================================================================
+          n_cells  mean_charge_time_min  mean_Tmax_C  n_with_Tmax
+step1                                                            
+1C              1                 10.37        32.16            1
+2C              3                 10.31        37.58            3
+3.6C            7                 11.53        36.13            7
+4C              5                 10.93        35.46            5
+4.4C            5                 11.19        35.35            5
+4.65C           3                 10.20        35.80            3
+4.8C            5                 10.05        33.94            5
+4.9C            3                 10.14        37.03            3
+5.2C            6                 10.14        37.07            6
+5.4C           14                 11.09        36.06           14
+5.6C            6                 10.14        36.96            6
+6C             18                 10.69        36.59           18
+7C              6                 10.94        35.95            6
+8C              6                 11.17        36.93            6
+unparsed       97                 10.28        36.20           97
+
+==============================================================================
+6. Three shortest and longest lives
+==============================================================================
+Shortest (stored cycle_life):
+cell_id      batch  cycle_life  cycle_life_check charge_policy_raw
+   b2c1 2017-06-30       148.0             148.0        2C(10%)-6C
+  b2c15 2017-06-30       209.0               NaN           80%)-4C
+   b2c0 2017-06-30       300.0             300.0         1C(4%)-6C
+Longest (stored cycle_life):
+cell_id      batch  cycle_life  cycle_life_check           charge_policy_raw
+  b3c38 2018-04-12      1935.0               NaN     5C(67%)-4C-newstructure
+   b3c7 2018-04-12      1836.0               NaN 4.8C(80%)-4.8C-newstructure
+  b3c45 2018-04-12      1801.0               NaN 4.8C(80%)-4.8C-newstructure
+
+==============================================================================
+Extraction notes (5)
+==============================================================================
+  [2019-01-24] b4c31: QDischarge has 834 values but summary/cycle has 833; dropped trailing value(s) [0.0] with no cycle number
+  [2019-01-24] b4c31: chargetime has 834 values but summary/cycle has 833; dropped trailing value(s) [0.0] with no cycle number
+  [2019-01-24] b4c31: Tmax has 834 values but summary/cycle has 833; dropped trailing value(s) [0.0] with no cycle number
+  [2019-01-24] b4c31: Tavg has 834 values but summary/cycle has 833; dropped trailing value(s) [0.0] with no cycle number
+  [2019-01-24] b4c31: IR has 834 values but summary/cycle has 833; dropped trailing value(s) [0.0] with no cycle number
+Policies not parsed as simple two-step (97 cells):
+  '5.3C(54%)-4C-newstructure': 8
+  '5.6C(19%)-4.6C-newstructure': 8
+  '5.6C(36%)-4.3C-newstructure': 8
+  '4.8C(80%)-4.8C-newstructure': 8
+  '5C(67%)-4C-newstructure': 7
+  '4.8-5.2-5.2-4.16': 5
+  '3.6-6-5.6-4.755': 5
+  '8-4.4-4.4-3.94': 5
+  '8-6-4.8-3': 5
+  '4.4-5.6-5.2-4.252': 5
+  '8-7-5.2-2.68': 5
+  '6-5.6-4.4-3.834': 5
+  '7-4.8-4.8-3.652': 5
+  '5.2-5.2-4.8-4.16': 5
+  '80%)-3.6C': 3
+  '3.7C(31%)-5.9C-newstructure': 3
+  '80%)-4C': 2
+  '5.9C(15%)-4.6C-newstructure': 2
+  '5.9C(60%)-3.1C-newstructure': 2
+  '4C(31%)-5': 1
