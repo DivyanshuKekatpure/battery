@@ -2,3 +2,6 @@ data/
 outputs/*.mat
 .venv/
 .DS_Store
+outputs/*.h5
+outputs/*.tmp
+__pycache__/

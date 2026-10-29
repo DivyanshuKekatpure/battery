@@ -1,0 +1,180 @@
+Reading 2017-05-12_batchdata_updated_struct_errorcorrect.mat ...
+Reading 2017-06-30_batchdata_updated_struct_errorcorrect.mat ...
+Reading 2018-04-12_batchdata_updated_struct_errorcorrect.mat ...
+Reading 2019-01-24_batchdata_updated_struct_errorcorrect.mat ...
+
+cycle_summary.csv:   154,411 rows, 185 cells
+early_features.csv:  185 rows, 21 features
+discharge_curves.h5: 141.6 MB
+
+Blank features per batch (count of cells):
+            cycle_life  cycle_life_merged  IR_min_2_100_ohm  IR_100_minus_2_ohm  T_integral_2_100_degC_min
+batch                                                                                                     
+2017-05-12           0                  0                 0                   0                          1
+2017-06-30           0                  5                 0                   0                          0
+2018-04-12           2                  2                 0                   0                          0
+2019-01-24           0                  0                45                  45                          0
+
+Extraction notes (162):
+  b1c0: 1 cycle(s) in 2-100 last longer than 300 min (max 643 min, likely a test pause); included in T_integral as recorded
+  b1c0: Qdlin empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c0: Tdlin empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c0: discharge_dQdV empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c1: 1 cycle(s) in 2-100 last longer than 300 min (max 461 min, likely a test pause); included in T_integral as recorded
+  b1c1: Qdlin empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c1: Tdlin empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c1: discharge_dQdV empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c2: 1 cycle(s) in 2-100 last longer than 300 min (max 461 min, likely a test pause); included in T_integral as recorded
+  b1c2: Qdlin empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c2: Tdlin empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c2: discharge_dQdV empty/missing for 1 of 122 exported cycles (left as NaN rows)
+  b1c3: 1 cycle(s) in 2-100 last longer than 300 min (max 461 min, likely a test pause); included in T_integral as recorded
+  b1c3: Qdlin empty/missing for 1 of 123 exported cycles (left as NaN rows)
+  b1c3: Tdlin empty/missing for 1 of 123 exported cycles (left as NaN rows)
+  b1c3: discharge_dQdV empty/missing for 1 of 123 exported cycles (left as NaN rows)
+  b1c4: 1 cycle(s) in 2-100 last longer than 300 min (max 461 min, likely a test pause); included in T_integral as recorded
+  b1c4: Qdlin empty/missing for 1 of 123 exported cycles (left as NaN rows)
+  b1c4: Tdlin empty/missing for 1 of 123 exported cycles (left as NaN rows)
+  b1c4: discharge_dQdV empty/missing for 1 of 123 exported cycles (left as NaN rows)
+  b1c5: 1 cycle(s) in 2-100 last longer than 300 min (max 460 min, likely a test pause); included in T_integral as recorded
+  b1c5: Qdlin empty/missing for 1 of 120 exported cycles (left as NaN rows)
+  b1c5: Tdlin empty/missing for 1 of 120 exported cycles (left as NaN rows)
+  b1c5: discharge_dQdV empty/missing for 1 of 120 exported cycles (left as NaN rows)
+  b1c6: 1 cycle(s) in 2-100 last longer than 300 min (max 460 min, likely a test pause); included in T_integral as recorded
+  b1c6: Qdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c6: Tdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c6: discharge_dQdV empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c7: 1 cycle(s) in 2-100 last longer than 300 min (max 460 min, likely a test pause); included in T_integral as recorded
+  b1c7: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c7: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c7: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c8: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c8: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c8: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c9: Qdlin empty/missing for 1 of 120 exported cycles (left as NaN rows)
+  b1c9: Tdlin empty/missing for 1 of 120 exported cycles (left as NaN rows)
+  b1c9: discharge_dQdV empty/missing for 1 of 120 exported cycles (left as NaN rows)
+  b1c10: 1 cycle(s) in 2-100 last longer than 300 min (max 458 min, likely a test pause); included in T_integral as recorded
+  b1c10: Qdlin empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c10: Tdlin empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c10: discharge_dQdV empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c11: 1 cycle(s) in 2-100 last longer than 300 min (max 458 min, likely a test pause); included in T_integral as recorded
+  b1c11: Qdlin empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c11: Tdlin empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c11: discharge_dQdV empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c12: Qdlin empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c12: Tdlin empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c12: discharge_dQdV empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c13: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c13: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c13: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c14: 1 cycle(s) in 2-100 last longer than 300 min (max 461 min, likely a test pause); included in T_integral as recorded
+  b1c14: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c14: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c14: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c15: 1 cycle(s) in 2-100 last longer than 300 min (max 461 min, likely a test pause); included in T_integral as recorded
+  b1c15: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c15: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c15: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c16: 1 cycle(s) in 2-100 last longer than 300 min (max 460 min, likely a test pause); included in T_integral as recorded
+  b1c16: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c16: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c16: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c17: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c17: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c17: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c18: median raw t span over cycles 2-100 is 2258 (vs ~45-60 min for other cells); t may not be in minutes for this cell -> T_integral blank
+  b1c18: Qdlin empty/missing for 1 of 112 exported cycles (left as NaN rows)
+  b1c18: Tdlin empty/missing for 1 of 112 exported cycles (left as NaN rows)
+  b1c18: discharge_dQdV empty/missing for 1 of 112 exported cycles (left as NaN rows)
+  b1c19: Qdlin empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c19: Tdlin empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c19: discharge_dQdV empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c20: 1 cycle(s) in 2-100 last longer than 300 min (max 459 min, likely a test pause); included in T_integral as recorded
+  b1c20: Qdlin empty/missing for 1 of 109 exported cycles (left as NaN rows)
+  b1c20: Tdlin empty/missing for 1 of 109 exported cycles (left as NaN rows)
+  b1c20: discharge_dQdV empty/missing for 1 of 109 exported cycles (left as NaN rows)
+  b1c21: 1 cycle(s) in 2-100 last longer than 300 min (max 459 min, likely a test pause); included in T_integral as recorded
+  b1c21: Qdlin empty/missing for 1 of 110 exported cycles (left as NaN rows)
+  b1c21: Tdlin empty/missing for 1 of 110 exported cycles (left as NaN rows)
+  b1c21: discharge_dQdV empty/missing for 1 of 110 exported cycles (left as NaN rows)
+  b1c22: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c22: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c22: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c23: Qdlin empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c23: Tdlin empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c23: discharge_dQdV empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c24: Qdlin empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c24: Tdlin empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c24: discharge_dQdV empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c25: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c25: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c25: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c26: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c26: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c26: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c27: Qdlin empty/missing for 1 of 115 exported cycles (left as NaN rows)
+  b1c27: Tdlin empty/missing for 1 of 115 exported cycles (left as NaN rows)
+  b1c27: discharge_dQdV empty/missing for 1 of 115 exported cycles (left as NaN rows)
+  b1c28: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c28: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c28: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c29: Qdlin empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c29: Tdlin empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c29: discharge_dQdV empty/missing for 1 of 117 exported cycles (left as NaN rows)
+  b1c30: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c30: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c30: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c31: Qdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c31: Tdlin empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c31: discharge_dQdV empty/missing for 1 of 116 exported cycles (left as NaN rows)
+  b1c32: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c32: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c32: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c33: Qdlin empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c33: Tdlin empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c33: discharge_dQdV empty/missing for 1 of 114 exported cycles (left as NaN rows)
+  b1c34: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c34: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c34: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c35: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c35: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c35: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c36: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c36: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c36: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c37: Qdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c37: Tdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c37: discharge_dQdV empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c38: Qdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c38: Tdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c38: discharge_dQdV empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c39: Qdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c39: Tdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c39: discharge_dQdV empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c40: Qdlin empty/missing for 1 of 118 exported cycles (left as NaN rows)
+  b1c40: Tdlin empty/missing for 1 of 118 exported cycles (left as NaN rows)
+  b1c40: discharge_dQdV empty/missing for 1 of 118 exported cycles (left as NaN rows)
+  b1c41: Qdlin empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c41: Tdlin empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c41: discharge_dQdV empty/missing for 1 of 119 exported cycles (left as NaN rows)
+  b1c42: Qdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c42: Tdlin empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c42: discharge_dQdV empty/missing for 1 of 113 exported cycles (left as NaN rows)
+  b1c43: Qdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c43: Tdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c43: discharge_dQdV empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c44: Qdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c44: Tdlin empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c44: discharge_dQdV empty/missing for 1 of 111 exported cycles (left as NaN rows)
+  b1c45: Qdlin empty/missing for 1 of 110 exported cycles (left as NaN rows)
+  b1c45: Tdlin empty/missing for 1 of 110 exported cycles (left as NaN rows)
+  b1c45: discharge_dQdV empty/missing for 1 of 110 exported cycles (left as NaN rows)
+  b3c17: 1 cycle(s) in 2-100 last longer than 300 min (max 1323 min, likely a test pause); included in T_integral as recorded
+  b4c31: summary/QCharge has 1 trailing value(s) with no cycle number [0.0] -> dropped
+  b4c31: summary/QDischarge has 1 trailing value(s) with no cycle number [0.0] -> dropped
+  b4c31: summary/IR has 1 trailing value(s) with no cycle number [0.0] -> dropped
+  b4c31: summary/Tmax has 1 trailing value(s) with no cycle number [0.0] -> dropped
+  b4c31: summary/Tavg has 1 trailing value(s) with no cycle number [0.0] -> dropped
+  b4c31: summary/Tmin has 1 trailing value(s) with no cycle number [0.0] -> dropped
+  b4c31: summary/chargetime has 1 trailing value(s) with no cycle number [0.0] -> dropped
