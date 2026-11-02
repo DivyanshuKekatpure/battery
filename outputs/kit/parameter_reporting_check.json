@@ -1,0 +1,14 @@
+{
+  "existing_model_data_and_money_outputs_unchanged": [
+    "model.json",
+    "bootstrap_fits.csv",
+    "predicted_life.csv",
+    "financial_strategies.csv",
+    "financial_sensitivity.csv",
+    "observations.csv"
+  ],
+  "all_24_scales_reconstruct_published_medians": true,
+  "new_parameter_summary_reproducible": true,
+  "word_document_xml_reproducible": true,
+  "new_observations_or_refits": false
+}

@@ -14,6 +14,12 @@ The 766.5-EFC horizon exceeds the baseline group's last valid measured follow-up
 
 ## Supporting results
 
+Distribution inputs: S(t)=exp[-(t/eta)^k], location fixed at zero; k=7.018 (nominal 95% CI 6.324–12.936). Table 2 lists each eta in EFC. The lognormal sensitivity has sigma=0.181004 and each listed median, with log L normally distributed. These are fitted parameters, not additional cell measurements.
+
+Scenario settings: 25°C; 0.80 initial-capacity replacement threshold; horizon 766.5 nominal EFC; lifetime-transfer multiplier 1 (assumed, unvalidated); independent fresh replacement lives; renewal grid 0.25 EFC, checked at half that step. Zero location is fixed, not fitted. Uncertainty uses the same 2,000 joint cell-bootstrap fits, not independent draws from marginal parameter intervals.
+
+Sensitivity settings: assumed use 0.5/0.7/1.0 EFC/day; assumed lifetime multipliers 0.5/1/2; dated repair scenarios $99/$119. These values define scenarios, not observed phone usage distributions or confidence bounds. No discounting is applied. Common-shape assumptions and the weaker Weibull held-out performance remain limitations.
+
 Table 1. Financial inputs. All money is illustrative USD, using a dated repair estimate.
 
 | Input | Value | Evidence status |
@@ -25,7 +31,18 @@ Table 1. Financial inputs. All money is illustrative USD, using a dated repair e
 | incremental_implementation_cost | 0.0 USD | assumed |
 | additional_service_fee | 0.0 USD | assumed |
 
-Table 2. Conditional three-year replacement spending and savings versus 5/3C/100% at 25°C. Intervals are nominal 95% cell-bootstrap intervals conditional on Weibull/phone-transfer assumptions.
+Table 2. Lifetime-distribution inputs to the 25°C financial scenarios. All rows share Weibull shape k; scales and lognormal medians are estimates. Lognormal sensitivity values are point estimates only.
+
+| Strategy | Weibull scale (EFC) | Scale 95% CI | Lognormal median (EFC) |
+| --- | --- | --- | --- |
+| 1/3C 100% | 2,015.104 | [1,861.721, 2,159.845] | 2,003.253 |
+| 1/3C 90% | 3,200.044 | [2,866.048, 3,764.317] | 3,204.238 |
+| 1C 100% | 1,310.708 | [1,229.095, 1,411.857] | 1,233.257 |
+| 1C 90% | 2,345.022 | [2,057.733, 2,819.225] | 2,206.623 |
+| 5/3C 100% | 593.674 | [388.482, 819.616] | 472.546 |
+| 5/3C 90% | 1,187.051 | [581.257, 1,372.309] | 875.764 |
+
+Table 3. Conditional three-year replacement spending and savings versus 5/3C/100% at 25°C. Intervals are nominal 95% cell-bootstrap intervals conditional on Weibull/phone-transfer assumptions.
 
 | Strategy | Expected replacements | Spending USD | Saving USD [95% CI] |
 | --- | --- | --- | --- |

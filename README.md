@@ -31,6 +31,7 @@ Useful outputs include:
 
 - `outputs/kit/preparation_summary.json`, `cell_inclusion.csv`, `descriptives.csv`: measured-data coverage and decisions.
 - `regression.csv`, `interaction_tests.csv`, `predicted_life.csv`, `cap_contrasts.csv`: model estimates with nominal intervals.
+- `model_parameters.json`, `distribution_parameters.csv`, `lognormal_regression.csv`: explicit shape/scale parameterization, all condition scales, and sensitivity coefficients.
 - `cross_validation.csv`, `sensitivity_predictions.csv`: robustness and predictive checks.
 - `financial_strategies.csv`, `financial_sensitivity.csv`, `annual_cost.csv`: conditional money calculations.
 - `outputs/kit/sources/`: cited source register and explicitly classified monetary assumptions.

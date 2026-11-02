@@ -12,7 +12,7 @@ The 72 selected cells represent this KIT experiment, not smartphone batteries ge
 
 We analyzed the downloaded KIT version 2 result data, not simulated cell observations (Luh & Blank, 2024). Selection fixed discharge at 1C and the lower voltage at 3.249 V, leaving three charging rates (1/3C, 1C, 5/3C), two upper limits (approximately 90%, 100%), four bath temperatures (0, 10, 25, 40°C), and three physical replicates in each of 24 combinations. We verified archive checksums, mapped termination reasons from the supplied workbook, and linked reference capacities to original CSV rows.
 
-An accelerated-failure-time regression models log lifetime scale using categorical factors and all two-factor interactions; 1C, 100%, and 25°C define the reference. A common Weibull shape pools information across sparse groups. Interval likelihoods retain uncertain crossing times, while survival likelihoods retain cells that stopped before a crossing. No midpoint is substituted as an observed failure. We resampled whole cells within conditions 2,000 times, refitting each sample to obtain nominal percentile confidence intervals. Repeated check-ups are not independent replicates.
+An accelerated-failure-time regression models log lifetime scale using categorical factors and all two-factor interactions; 1C, 100%, and 25°C define the reference. The survival equation is S(t|x)=exp[-(t/eta(x))^k], with scale eta(x)=1000 exp(X beta) EFC and location fixed at zero. The common shape k pools information across sparse groups. Interval likelihoods retain uncertain crossing times, while survival likelihoods retain cells that stopped before a crossing. No midpoint is substituted as an observed failure. We resampled whole cells within conditions 2,000 times, refitting each sample to obtain nominal percentile confidence intervals. Repeated check-ups are not independent replicates.
 
 Approximate likelihood-ratio tests assess the three interactions with Holm correction. Balanced three-fold validation withholds one replicate per condition and scores its censored predictive likelihood. Prespecified sensitivities use a lognormal distribution, rated-capacity normalization, operating-only throughput, flagged/final measurements, and pessimistic shutdown events. These checks assess dependence on model and censoring choices; they cannot establish smartphone transfer. Tables distinguish observed or derived endpoints from model estimates.
 
@@ -32,6 +32,16 @@ At 1/3C/25°C, all three capped cells remain above the threshold; their estimate
 
 ## Supporting results
 
+Distribution definitions: t is baseline-subtracted EFC; k is Weibull shape and eta(x) is condition-specific scale. S(t|x)=exp[-(t/eta(x))^k] for t >= 0. Scale eta is the 63.2th failure percentile, not the median. Median life = eta(x)*(ln 2)^(1/k). Location is fixed at zero.
+
+Coding: log(eta(x)/1000 EFC)=X beta. X contains an intercept and binary indicators for rate_1third (1/3C), rate_5third (5/3C), cap90, and temp0/temp10/temp40, plus all cross-factor two-way products. Reference indicators are all zero at 1C/100%/25°C; no three-way term is fitted. All logarithms are natural.
+
+Bootstrap intervals transform each complete fitted parameter vector before taking percentiles; median intervals preserve the dependence between shape and scale. Coefficients are rounded for display; full precision and all 24 condition scales are in outputs/kit/distribution_parameters.csv and model.json.
+
+Lognormal sensitivity: log(L/1000 EFC)=X beta_LN + sigma Z, where Z is standard normal, sigma=0.181004, and the reference median is 1,233.257 EFC. Its scale is a median, unlike Weibull eta. These are point estimates only; no secondary bootstrap intervals were calculated. All lognormal coefficients are in outputs/kit/lognormal_regression.csv.
+
+Fixed protocol and endpoint settings: discharge 1C; lower voltage 3.249 V; upper voltages 4.092 V (~90%) and 4.200 V (~100%); nominal capacity 3 Ah; endpoint 0.80 of each cell’s initial valid capacity. These are design/analysis settings rather than fitted degradation parameters. The seed is 20261101 and there are 2,000 successful cell-bootstrap fits.
+
 Table 1. Derived endpoint coverage after prespecified exclusions. Crossings are intervals, not exact failures.
 
 | Bath °C | Cells | Crossings | Right-censored |
@@ -41,31 +51,40 @@ Table 1. Derived endpoint coverage after prespecified exclusions. Crossings are 
 | 25 | 18 | 14 | 4 |
 | 40 | 18 | 16 | 2 |
 
-Table 2. Model-estimated Weibull AFT coefficients and nominal 95% bootstrap intervals. Log scale concerns life/1000 EFC; reference 1C, 100%, 25°C. No individual coefficient p-values are claimed.
+Table 2. Weibull parameters transformed from existing fitted/bootstrap vectors. Reference condition: 1C, 100% cap, 25°C. All estimates and intervals are conditional on this model.
 
-| Term | Estimate | 95% CI |
-| --- | --- | --- |
-| Intercept | 0.271 | [0.206, 0.345] |
-| rate_1third | 0.430 | [0.335, 0.501] |
-| rate_5third | -0.792 | [-1.224, -0.478] |
-| cap90 | 0.582 | [0.422, 0.779] |
-| temp0 | -2.262 | [-2.349, -2.164] |
-| temp10 | -1.254 | [-1.342, -1.144] |
-| temp40 | -0.431 | [-0.599, -0.330] |
-| rate_1third:cap90 | -0.119 | [-0.196, -0.041] |
-| rate_5third:cap90 | 0.111 | [-0.234, 0.386] |
-| rate_1third:temp0 | 0.677 | [0.596, 0.768] |
-| rate_1third:temp10 | 0.110 | [0.032, 0.214] |
-| rate_1third:temp40 | -0.332 | [-0.435, -0.164] |
-| rate_5third:temp0 | -0.200 | [-0.421, 0.200] |
-| rate_5third:temp10 | -0.239 | [-0.704, 0.233] |
-| rate_5third:temp40 | 0.695 | [0.303, 1.202] |
-| cap90:temp0 | 0.255 | [0.036, 0.424] |
-| cap90:temp10 | 0.137 | [-0.178, 0.302] |
-| cap90:temp40 | 0.284 | [0.060, 0.526] |
-| log_shape | 1.949 | [1.844, 2.560] |
+| Parameter | Estimate | Nominal 95% CI | Units / status |
+| --- | --- | --- | --- |
+| Common shape k | 7.018 | [6.324, 12.936] | Dimensionless; estimated |
+| Reference scale eta | 1,310.708 | [1,229.095, 1,411.857] | EFC; estimated |
+| Reference median | 1,244.016 | [1,170.005, 1,358.010] | EFC; model-derived |
+| Location | 0 | Not estimated | EFC; fixed at zero |
 
-Table 3. Approximate interaction likelihood-ratio tests; three-test Holm correction.
+Table 3. Model-estimated Weibull AFT coefficients with bootstrap SE and nominal 95% intervals. Intercept is log(reference scale/1000 EFC); log_shape is log(k). Interaction terms multiply the indicated binary indicators. No individual coefficient p-values are claimed.
+
+| Term | Estimate | Bootstrap SE | 95% CI |
+| --- | --- | --- | --- |
+| Intercept | 0.27057 | 0.03698 | [0.20628, 0.34491] |
+| rate_1third | 0.43010 | 0.04388 | [0.33475, 0.50117] |
+| rate_5third | -0.79199 | 0.20868 | [-1.22389, -0.47809] |
+| cap90 | 0.58173 | 0.09103 | [0.42171, 0.77870] |
+| temp0 | -2.26219 | 0.04644 | [-2.34866, -2.16378] |
+| temp10 | -1.25396 | 0.05108 | [-1.34234, -1.14390] |
+| temp40 | -0.43057 | 0.06988 | [-0.59860, -0.33028] |
+| rate_1third:cap90 | -0.11923 | 0.03977 | [-0.19601, -0.04101] |
+| rate_5third:cap90 | 0.11117 | 0.16111 | [-0.23412, 0.38585] |
+| rate_1third:temp0 | 0.67701 | 0.04422 | [0.59630, 0.76841] |
+| rate_1third:temp10 | 0.10998 | 0.04659 | [0.03218, 0.21398] |
+| rate_1third:temp40 | -0.33172 | 0.07075 | [-0.43485, -0.16391] |
+| rate_5third:temp0 | -0.19954 | 0.17161 | [-0.42121, 0.19992] |
+| rate_5third:temp10 | -0.23880 | 0.23812 | [-0.70403, 0.23269] |
+| rate_5third:temp40 | 0.69498 | 0.23727 | [0.30261, 1.20155] |
+| cap90:temp0 | 0.25543 | 0.10486 | [0.03631, 0.42430] |
+| cap90:temp10 | 0.13738 | 0.12351 | [-0.17772, 0.30191] |
+| cap90:temp40 | 0.28369 | 0.11820 | [0.06040, 0.52613] |
+| log_shape | 1.94852 | 0.18689 | [1.84442, 2.56005] |
+
+Table 4. Approximate interaction likelihood-ratio tests; three-test Holm correction.
 
 | Interaction | LR | df | Raw p | Holm p |
 | --- | --- | --- | --- | --- |
@@ -73,16 +92,16 @@ Table 3. Approximate interaction likelihood-ratio tests; three-test Holm correct
 | rate:temp | 75.53 | 6 | 2.98e-14 | 8.94e-14 |
 | cap:temp | 4.81 | 3 | 0.186 | 0.372 |
 
-Table 4. Model-estimated median life at 25°C; nominal 95% intervals. *Median exceeds maximum follow-up in that condition.
+Table 5. Condition-specific Weibull scale and median life at 25°C, with nominal 95% intervals. Shape k is common. *Median exceeds maximum follow-up in that condition. Scales are estimated distribution parameters, not measured lifetimes.
 
-| Rate | Cap | Median EFC | 95% CI |
-| --- | --- | --- | --- |
-| 1/3C | 100% | 1,913 | [1,782, 2,069] |
-| 1/3C | 90% | 3,037* | [2,763, 3,584] |
-| 1C | 100% | 1,244 | [1,170, 1,358] |
-| 1C | 90% | 2,226 | [1,971, 2,699] |
-| 5/3C | 100% | 563 | [371, 790] |
-| 5/3C | 90% | 1,127 | [561, 1,323] |
+| Rate | Cap | Scale eta (EFC) | Scale 95% CI | Median EFC | Median 95% CI |
+| --- | --- | --- | --- | --- | --- |
+| 1/3C | 100% | 2,015.1 | [1,861.7, 2,159.8] | 1,913 | [1,782, 2,069] |
+| 1/3C | 90% | 3,200.0 | [2,866.0, 3,764.3] | 3,037* | [2,763, 3,584] |
+| 1C | 100% | 1,310.7 | [1,229.1, 1,411.9] | 1,244 | [1,170, 1,358] |
+| 1C | 90% | 2,345.0 | [2,057.7, 2,819.2] | 2,226 | [1,971, 2,699] |
+| 5/3C | 100% | 593.7 | [388.5, 819.6] | 563 | [371, 790] |
+| 5/3C | 90% | 1,187.1 | [581.3, 1,372.3] | 1,127 | [561, 1,323] |
 
 ![Figure 1. Measured reference capacities at 25°C. Connecting lines only link observations; they do not impute missing values.](../figures/observed_25C.png)
 

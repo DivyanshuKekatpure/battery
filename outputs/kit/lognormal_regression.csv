@@ -1,0 +1,20 @@
+term,estimate,quantity_class
+Intercept,0.20965869725621583,model-estimated sensitivity; no bootstrap CI
+rate_1third,0.4851138932784515,model-estimated sensitivity; no bootstrap CI
+rate_5third,-0.9592784502566352,model-estimated sensitivity; no bootstrap CI
+cap90,0.5818044272475968,model-estimated sensitivity; no bootstrap CI
+temp0,-2.2612138714088674,model-estimated sensitivity; no bootstrap CI
+temp10,-1.2195962290845916,model-estimated sensitivity; no bootstrap CI
+temp40,-0.42445231702602315,model-estimated sensitivity; no bootstrap CI
+rate_1third:cap90,-0.1121025584997624,model-estimated sensitivity; no bootstrap CI
+rate_5third:cap90,0.03515707215613504,model-estimated sensitivity; no bootstrap CI
+rate_1third:temp0,0.6495051286429443,model-estimated sensitivity; no bootstrap CI
+rate_1third:temp10,0.04742766923124998,model-estimated sensitivity; no bootstrap CI
+rate_1third:temp40,-0.34234565688491736,model-estimated sensitivity; no bootstrap CI
+rate_5third:temp0,-0.002669478119326069,model-estimated sensitivity; no bootstrap CI
+rate_5third:temp10,-0.1869906647785348,model-estimated sensitivity; no bootstrap CI
+rate_5third:temp40,0.7412492502103968,model-estimated sensitivity; no bootstrap CI
+cap90:temp0,0.26769974267494157,model-estimated sensitivity; no bootstrap CI
+cap90:temp10,0.14837372146497307,model-estimated sensitivity; no bootstrap CI
+cap90:temp40,0.25542824244437823,model-estimated sensitivity; no bootstrap CI
+log_sigma,-1.7092369994666543,model-estimated sensitivity; no bootstrap CI

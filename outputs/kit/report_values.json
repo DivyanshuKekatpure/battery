@@ -1,4 +1,49 @@
 {
+  "distribution_parameters": {
+    "quantity_class": "model-estimated from existing fitted KIT data",
+    "weibull_shape": {
+      "estimate": 7.018279459380847,
+      "ci_lo": 6.324409483819562,
+      "ci_hi": 12.936442783405445,
+      "units": "dimensionless",
+      "common_across_conditions": true
+    },
+    "reference_scale_EFC": {
+      "estimate": 1310.7078801700648,
+      "ci_lo": 1229.0945998341208,
+      "ci_hi": 1411.857408964243
+    },
+    "reference_median_EFC": {
+      "estimate": 1244.0158566714028,
+      "ci_lo": 1170.0052045047134,
+      "ci_hi": 1358.0097481053886
+    },
+    "reference_condition": {
+      "charging_rate_C": 1,
+      "cap_percent": 100,
+      "temperature_degC": 25
+    },
+    "fixed_location_EFC": {
+      "value": 0,
+      "quantity_class": "fixed model assumption; not estimated"
+    },
+    "input_EFC_scale": 1000.0,
+    "bootstrap_samples": 2000,
+    "weibull_survival": "S(t|x)=exp[-(t/eta(x))^k], t>=0",
+    "scale_equation": "eta(x)=1000*exp(X beta) EFC",
+    "median_equation": "median(x)=eta(x)*(ln 2)^(1/k)",
+    "sources": [
+      "model.json",
+      "bootstrap_fits.csv",
+      "sensitivity_models.json"
+    ],
+    "lognormal_sensitivity": {
+      "sigma": 0.1810038459740479,
+      "reference_median_EFC": 1233.2570740958352,
+      "quantity_class": "model-estimated sensitivity point estimates; no bootstrap CIs",
+      "equation": "log(L/1000)=X beta_LN + sigma*Z, Z~Normal(0,1)"
+    }
+  },
   "preparation": {
     "selected_cells": 72,
     "conditions": 24,
@@ -124,6 +169,7 @@
     "ratio": "cap_contrasts.csv",
     "finance": "financial_strategies.csv",
     "model_sensitivity": "financial_sensitivity.csv",
-    "counts": "preparation_summary.json"
+    "counts": "preparation_summary.json",
+    "parameters": "model_parameters.json and distribution_parameters.csv"
   }
 }

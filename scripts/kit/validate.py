@@ -22,6 +22,14 @@ def main():
     assert base.savings_USD==base.savings_ci_lo==base.savings_ci_hi==0
     assert np.allclose(f.savings_USD,base.spend_USD-f.spend_USD)
     p,fbody=content()
+    parameters=json.loads((OUT/'model_parameters.json').read_text())
+    distributions=pd.read_csv(OUT/'distribution_parameters.csv')
+    life=pd.read_csv(OUT/'predicted_life.csv')
+    joined=distributions.merge(life,on=['temp','rate','cap'],validate='one_to_one')
+    assert len(joined)==24
+    np.testing.assert_allclose(joined.weibull_scale_EFC*np.log(2)**(1/parameters['weibull_shape']['estimate']),joined.median_EFC,rtol=1e-12)
+    parameter_rows=distributions[distributions.temp==25]
+
     report_checks=[]
     for name,sections,nimages in [('Preliminary_Methods_and_Results',p,3),('Financial_Impacts',fbody,2)]:
         path=OUT/'report_drafts'/(name+'.docx');doc=Document(path)
@@ -30,12 +38,22 @@ def main():
             for para in body.split('\n\n'):assert para in text,(name,'narrative differs')
         assert len(doc.inline_shapes)==nimages
         assert len(doc.tables)>0
+        table_text='\n'.join(' '.join(c.text for c in row.cells) for table in doc.tables for row in table.rows)
+        complete_text=text+'\n'+table_text
+        assert f"{parameters['weibull_shape']['estimate']:.3f}" in complete_text
+        assert 'S(t' in text and 'location' in text.lower()
+        for row in parameter_rows.itertuples():
+            # Preliminary scale uses one decimal; financial input table uses three.
+            displayed=f'{row.weibull_scale_EFC:,.1f}' if name=='Preliminary_Methods_and_Results' else f'{row.weibull_scale_EFC:,.3f}'
+            assert displayed in table_text,(name,displayed)
+        assert f"{parameters['lognormal_sensitivity']['sigma']:.6f}" in text
+
         assert not any(token in text for token in ['5,237','820.2','multistage','[insert','TODO','$4.55'])
         assert 'References' in text and 'https://doi.org/10.35097/1969' in text
         xml=zipfile.ZipFile(path).read('word/document.xml')
         report_checks.append({'report':name,'tables':len(doc.tables),'figures':len(doc.inline_shapes),'document_xml_sha256':hashlib.sha256(xml).hexdigest(),'shared_narrative_verified':True})
     save_json('acceptance_checks.json',{'primary_design_valid':True,'source_columns_present':True,'bootstrap_count':len(b),
-             'bootstrap_success':int(b.success.sum()),'financial_identity_valid':True,'word_limits':json.loads((OUT/'report_word_counts.json').read_text()),'reports':report_checks})
+             'bootstrap_success':int(b.success.sum()),'financial_identity_valid':True,'distribution_parameters_reconstruct_published_medians':True,'word_limits':json.loads((OUT/'report_word_counts.json').read_text()),'reports':report_checks})
     print('Acceptance checks passed',flush=True)
 
 if __name__=='__main__':main()
