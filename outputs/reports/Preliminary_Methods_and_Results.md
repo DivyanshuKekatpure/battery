@@ -16,23 +16,23 @@ We fitted a Weibull accelerated-failure-time model: S(t|x)=exp[-(t/eta(x))^k], t
 
 Interval likelihoods use measured crossing brackets; survival likelihoods handle right-censored cells. We neither substitute midpoint failure times nor discard incomplete cases. Using seed 20261101, we refitted 2,000 whole-cell bootstrap samples within conditions, preserving joint shape/scale dependence when transforming parameters for percentile intervals. Repeated measurements aren't independent replicates.
 
-We tested interactions with Holm-adjusted likelihood-ratio tests. Three-fold validation withholds one replicate per condition; sensitivity checks vary capacity normalization, throughput, flagged/final measurements and shutdown assumptions. The lognormal alternative uses log(L/1000)=X beta_LN+sigma Z, Z standard normal, sigma=0.181004; its scale equals its median (reference 1,233.257 EFC). Secondary estimates have no bootstrap intervals.
+We tested interactions with Holm-adjusted likelihood-ratio tests. Three-fold validation withholds one replicate per condition; sensitivity checks vary capacity normalization, throughput, flagged/final measurements and shutdown assumptions. The lognormal alternative uses log(L/1000)=X beta_LN+sigma Z, Z standard normal, sigma=0.181; its scale equals its median (reference 1,233 EFC). Secondary estimates have no bootstrap intervals.
 
 ## Results
 
-We analyzed 859 measurements from 72 cells, giving 63 threshold-crossing intervals and 9 right-censored endpoints. We excluded eleven final-manual and three cold measurements without imputing any values. Each condition still has three physical cells. Figure 1 shows their histories; Figure 3 marks censoring with triangles.
+We analyzed 859 measurements from 72 cells, giving 63 threshold-crossing intervals and 9 right-censored endpoints. We excluded eleven final-manual and three cold measurements without imputing any values. Figure 1 shows histories; Figure 3 marks censoring with triangles.
 
 At 25°C, uncapped median-life estimates are 1,913, 1,244 and 563 EFC at 1/3C, 1C and 5/3C. With capping, they rise to 3,037, 2,226 and 1,127. At 5/3C, that's a life ratio of 2.00 (nominal 95% CI 1.31–2.92); median intervals are 371–790 EFC uncapped and 561–1,323 capped. These describe fitted distributions. They aren't observed individual lifetimes.
 
-The common shape is 7.018; reference scale is 1,310.708 EFC. Tables 2–3 give parameter intervals and regression coefficients. At 1C/25°C, cap90's coefficient is 0.582 (95% CI 0.422–0.779). Rate-by-temperature gives LR=75.53, six degrees of freedom, Holm-adjusted p<0.001. Rate-by-cap and cap-by-temperature adjusted p-values are 0.372 and 0.372; neither establishes identical benefits. Contrast intervals are unadjusted.
+The common shape is 7.02; reference scale is 1,311 EFC. At 1C/25°C, cap90's coefficient is 0.58 (95% CI 0.42–0.78). Rate-by-temperature gives LR=75.53, six degrees of freedom, Holm-adjusted p<0.001. Rate-by-cap and cap-by-temperature adjusted p-values are both 0.372; neither establishes identical benefits. With three cells per condition, within-condition resampling likely understates uncertainty: several Table 3 interaction intervals exclude zero although Table 4 tests don't. We base interaction conclusions on Table 4.
 
 Temperature matters here. At uncapped 5/3C, modeled median life is 48 EFC at 0°C, 563 at 25°C and 734 at 40°C (Figure 2), so this model doesn't support a temperature-independent rate penalty.
 
-All 2,000 bootstrap fits converged. But Weibull predicted poorly: held-out log likelihood totals -463.6, versus -152.7 for lognormal (higher is better). That substantially weakens confidence in our prespecified family. Its intervals leave out distributional uncertainty.
+All 2,000 bootstrap fits converged. But Weibull predicted poorly: held-out log likelihood totals -463.6, versus -152.7 for lognormal (higher is better). Two cells that outlived predictions, P040_1 (10°C, 5/3C, 90%) and P060_3 (40°C, 5/3C, 100%), contribute -321.7; Weibull's steep shape makes such lives very unlikely. Without them, totals are -141.9 versus -130.1. We deliberately keep prespecified Weibull, with lognormal as the main robustness check.
 
 None of the three capped 1/3C/25°C cells crossed the threshold, so their estimated median exceeds measured follow-up. Fault-related shutdowns challenge independent censoring. Shared baths limit temperature replication, while full diagnostic charges and cylindrical, liquid-cooled cells restrict smartphone transfer. We need smartphone-cell validation before promising quantitative phone lifetimes.
 
-Nominal intervals assume the distribution, common shape and within-condition resampling. Lognormal's stronger validation score shows why between-model uncertainty needs separate attention. A positive fitted cap effect establishes neither a precise population benefit nor smartphone transfer.
+Nominal intervals assume the distribution and common shape. A positive fitted cap effect establishes neither a precise population benefit nor smartphone transfer.
 
 Table 1. Derived endpoint coverage.
 
@@ -47,34 +47,34 @@ Table 2. Estimated Weibull parameters: reference 1C/100%/25°C; location fixed.
 
 | Parameter | Estimate | 95% CI |
 | --- | --- | --- |
-| Shape k | 7.018 | 6.324–12.936 |
-| Scale eta (EFC) | 1,310.708 | 1,229.095–1,411.857 |
-| Median (EFC) | 1,244.016 | 1,170.005–1,358.010 |
+| Shape k | 7.02 | 6.32–12.94 |
+| Scale eta (EFC) | 1,311 | 1,229–1,412 |
+| Median (EFC) | 1,244 | 1,170–1,358 |
 | Location (EFC) | 0 | Fixed |
 
 Table 3. Fitted coefficients: bootstrap SE/CIs; intercept=log(reference eta/1000); log_shape=log(k).
 
-| Term | Estimate | SE | 95% CI |
-| --- | --- | --- | --- |
-| Intercept | 0.27057 | 0.03698 | 0.20628–0.34491 |
-| rate_1third | 0.43010 | 0.04388 | 0.33475–0.50117 |
-| rate_5third | -0.79199 | 0.20868 | -1.22389–-0.47809 |
-| cap90 | 0.58173 | 0.09103 | 0.42171–0.77870 |
-| temp0 | -2.26219 | 0.04644 | -2.34866–-2.16378 |
-| temp10 | -1.25396 | 0.05108 | -1.34234–-1.14390 |
-| temp40 | -0.43057 | 0.06988 | -0.59860–-0.33028 |
-| rate_1third:cap90 | -0.11923 | 0.03977 | -0.19601–-0.04101 |
-| rate_5third:cap90 | 0.11117 | 0.16111 | -0.23412–0.38585 |
-| rate_1third:temp0 | 0.67701 | 0.04422 | 0.59630–0.76841 |
-| rate_1third:temp10 | 0.10998 | 0.04659 | 0.03218–0.21398 |
-| rate_1third:temp40 | -0.33172 | 0.07075 | -0.43485–-0.16391 |
-| rate_5third:temp0 | -0.19954 | 0.17161 | -0.42121–0.19992 |
-| rate_5third:temp10 | -0.23880 | 0.23812 | -0.70403–0.23269 |
-| rate_5third:temp40 | 0.69498 | 0.23727 | 0.30261–1.20155 |
-| cap90:temp0 | 0.25543 | 0.10486 | 0.03631–0.42430 |
-| cap90:temp10 | 0.13738 | 0.12351 | -0.17772–0.30191 |
-| cap90:temp40 | 0.28369 | 0.11820 | 0.06040–0.52613 |
-| log_shape | 1.94852 | 0.18689 | 1.84442–2.56005 |
+| Term | Estimate | SE | 2.5% | 97.5% |
+| --- | --- | --- | --- | --- |
+| Intercept | 0.27 | 0.04 | 0.21 | 0.34 |
+| rate_1third | 0.43 | 0.04 | 0.33 | 0.50 |
+| rate_5third | -0.79 | 0.21 | -1.22 | -0.48 |
+| cap90 | 0.58 | 0.09 | 0.42 | 0.78 |
+| temp0 | -2.26 | 0.05 | -2.35 | -2.16 |
+| temp10 | -1.25 | 0.05 | -1.34 | -1.14 |
+| temp40 | -0.43 | 0.07 | -0.60 | -0.33 |
+| rate_1third:cap90 | -0.12 | 0.04 | -0.20 | -0.04 |
+| rate_5third:cap90 | 0.11 | 0.16 | -0.23 | 0.39 |
+| rate_1third:temp0 | 0.68 | 0.04 | 0.60 | 0.77 |
+| rate_1third:temp10 | 0.11 | 0.05 | 0.03 | 0.21 |
+| rate_1third:temp40 | -0.33 | 0.07 | -0.43 | -0.16 |
+| rate_5third:temp0 | -0.20 | 0.17 | -0.42 | 0.20 |
+| rate_5third:temp10 | -0.24 | 0.24 | -0.70 | 0.23 |
+| rate_5third:temp40 | 0.69 | 0.24 | 0.30 | 1.20 |
+| cap90:temp0 | 0.26 | 0.10 | 0.04 | 0.42 |
+| cap90:temp10 | 0.14 | 0.12 | -0.18 | 0.30 |
+| cap90:temp40 | 0.28 | 0.12 | 0.06 | 0.53 |
+| log_shape | 1.95 | 0.19 | 1.84 | 2.56 |
 
 Table 4. Approximate interaction tests; Holm correction.
 
@@ -88,12 +88,12 @@ Table 5. Estimated 25°C lifetimes/scales; *median beyond measured follow-up.
 
 | Rate | Cap | eta/EFC | 95% CI | Median/EFC | 95% CI |
 | --- | --- | --- | --- | --- | --- |
-| 1/3C | 100% | 2,015.1 | 1,861.7–2,159.8 | 1,913 | 1,782–2,069 |
-| 1/3C | 90% | 3,200.0 | 2,866.0–3,764.3 | 3,037* | 2,763–3,584 |
-| 1C | 100% | 1,310.7 | 1,229.1–1,411.9 | 1,244 | 1,170–1,358 |
-| 1C | 90% | 2,345.0 | 2,057.7–2,819.2 | 2,226 | 1,971–2,699 |
-| 5/3C | 100% | 593.7 | 388.5–819.6 | 563 | 371–790 |
-| 5/3C | 90% | 1,187.1 | 581.3–1,372.3 | 1,127 | 561–1,323 |
+| 1/3C | 100% | 2,015 | 1,862–2,160 | 1,913 | 1,782–2,069 |
+| 1/3C | 90% | 3,200 | 2,866–3,764 | 3,037* | 2,763–3,584 |
+| 1C | 100% | 1,311 | 1,229–1,412 | 1,244 | 1,170–1,358 |
+| 1C | 90% | 2,345 | 2,058–2,819 | 2,226 | 1,971–2,699 |
+| 5/3C | 100% | 594 | 388–820 | 563 | 371–790 |
+| 5/3C | 90% | 1,187 | 581–1,372 | 1,127 | 561–1,323 |
 
 ![Figure 1. Measured 25°C retention; lines connect observations.](../kit/figures/observed_25C.png)
 

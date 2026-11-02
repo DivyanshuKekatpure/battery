@@ -1,8 +1,53 @@
 [
- {"id":"kit2024","title":"Luh & Blank (2024). Comprehensive battery aging dataset","url":"https://doi.org/10.1038/s41597-024-03831-x","accessed":"2026-11-01","evidence":"Original article and locally supplied version 2 README, EOC records, configuration, data dictionary, and overview. Version 2 data DOI 10.35097/1969."},
- {"id":"apple_service","title":"Apple. iPhone battery service","url":"https://support.apple.com/iphone/repair/battery-replacement","accessed":"2026-11-01","evidence":"Pricing failed to load in accessible page. Cannot verify a current price. Page states inspection, taxes and potential shipping fees apply. No numeric current price used."},
- {"id":"burkhardt2024","title":"Burkhardt, M. (2024-09-15). iPhone 16 Pro battery replacements will cost even more than last year","url":"https://9to5mac.com/2024/09/15/iphone-16-pro-battery-replacement/","accessed":"2026-11-01","evidence":"Dated secondary report citing Apple: base iPhone 16 fee $99; Pro fee $119. Used only as dated monetary scenarios, not current quotes."},
- {"id":"apple2024","title":"Apple (2024). iPhone 16 and iPhone 16 Plus Product Environmental Report","url":"https://www.apple.com/environment/pdf/products/iphone/iPhone_16_and_iPhone_16_Plus_PER_Sept2024.pdf","accessed":"2026-11-01","location":"Page 9, Use definition","evidence":"Three-year first-owner power-use assumption. Adopted horizon, not a measured lifespan."},
- {"id":"aussems2025","title":"Aussems, M. (2025-07-04). iPhone battery twice as bad as Samsung: which manufacturer performs best?","url":"https://itdaily.com/blogs/workplace/iphone-battery-twice-as-bad-as-samsung-which-manufacturer-performs-best/","accessed":"2026-11-01","location":"The Importance of Cycles","evidence":"Review-site estimate of roughly 0.7 cycles/day. No disclosed sample or uncertainty; weak evidence, scenario assumption."},
- {"id":"scipy","title":"SciPy censored distribution fitting documentation","url":"https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_continuous.fit.html","accessed":"2026-11-01","evidence":"Defines likelihood contributions for interval and right censoring; custom AFT implementation cross-checked against intercept-only CensoredData fit."}
+ {
+  "id": "kit2024",
+  "title": "Luh & Blank (2024). Comprehensive battery aging dataset",
+  "url": "https://doi.org/10.1038/s41597-024-03831-x",
+  "accessed": "2026-11-01",
+  "evidence": "Original article and locally supplied version 2 README, EOC records, configuration, data dictionary, and overview. Version 2 data DOI 10.35097/1969."
+ },
+ {
+  "id": "apple_service",
+  "title": "Apple. iPhone battery service",
+  "url": "https://support.apple.com/iphone/repair/battery-replacement",
+  "accessed": "2026-11-01",
+  "evidence": "Pricing failed to load in accessible page. Cannot verify a current price. Page states inspection, taxes and potential shipping fees apply. No numeric current price used."
+ },
+ {
+  "id": "burkhardt2024",
+  "title": "Burkhardt, M. (2024-09-15). iPhone 16 Pro battery replacements will cost even more than last year",
+  "url": "https://9to5mac.com/2024/09/15/iphone-16-pro-battery-replacement/",
+  "accessed": "2026-11-01",
+  "evidence": "Dated secondary report citing Apple: base iPhone 16 fee $99; Pro fee $119. Used only as dated monetary scenarios, not current quotes."
+ },
+ {
+  "id": "rossignol2026",
+  "title": "Rossignol, J. (2026-09-17). Apple increases battery replacement fee for iPhone 18 Pro and Pro Max",
+  "url": "https://www.macrumors.com/2026/09/17/apple-higher-iphone-18-pro-battery-fee/",
+  "accessed": "2026-11-01",
+  "evidence": "Dated secondary report citing Apple's site: $119 for iPhone 16 Pro and 17 Pro, $129 for iPhone 18 Pro. Does not state the base-model fee, so the $99 primary price is unchanged."
+ },
+ {
+  "id": "apple2024",
+  "title": "Apple (2024). iPhone 16 and iPhone 16 Plus Product Environmental Report",
+  "url": "https://www.apple.com/environment/pdf/products/iphone/iPhone_16_and_iPhone_16_Plus_PER_Sept2024.pdf",
+  "accessed": "2026-11-01",
+  "location": "Page 9, Use definition",
+  "evidence": "Three-year first-owner power-use assumption. Adopted horizon, not a measured lifespan."
+ },
+ {
+  "id": "aussems2025",
+  "title": "Aussems, M. (2025-07-04). iPhone battery twice as bad as Samsung: which manufacturer performs best?",
+  "url": "https://itdaily.com/blogs/workplace/iphone-battery-twice-as-bad-as-samsung-which-manufacturer-performs-best/",
+  "accessed": "2026-11-01",
+  "location": "The Importance of Cycles",
+  "evidence": "Review-site estimate of roughly 0.7 cycles/day. No disclosed sample or uncertainty; weak evidence, scenario assumption."
+ },
+ {
+  "id": "scipy",
+  "title": "SciPy censored distribution fitting documentation",
+  "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.rv_continuous.fit.html",
+  "accessed": "2026-11-01",
+  "evidence": "Defines likelihood contributions for interval and right censoring; custom AFT implementation cross-checked against intercept-only CensoredData fit."
+ }
 ]

@@ -22,6 +22,23 @@ def bootstrap_one(args):
 def scenarios():
     return pd.DataFrame([{'temp':t,'rate':r,'cap':c} for t in [0,10,25,40] for r in [1,3,5] for c in [100,90]])
 
+def cross_validate(df,X,lo,up):
+    """Three-fold held-out likelihood, per fold and per held-out cell."""
+    validation=[];cells=[]
+    for family in ['weibull','lognormal']:
+        for rep in [1,2,3]:
+            hold=df.replicate.to_numpy()==rep;f=fit(X[~hold],lo[~hold],up[~hold],family=family)
+            assert f['success'],(family,rep,f)
+            ll,_=contributions(f['theta'],X[hold],lo[hold],up[hold],family)
+            pred=median(f['theta'],X[hold],family)
+            validation.append({'family':family,'held_out_replicate':rep,'n_train':int((~hold).sum()),'n_test':int(hold.sum()),'held_out_log_likelihood':float(ll.sum()),'quantity_class':'model-estimated predictive validation'})
+            for (_,r),l,m in zip(df[hold].iterrows(),ll,pred):
+                cells.append({'family':family,'held_out_replicate':rep,'cell':r.cell,'temp':r.temp,'rate':r.rate,'cap':r.cap,'lower_EFC':r.lower_EFC,'upper_EFC':r.upper_EFC,
+                              'predicted_median_EFC':float(m),'held_out_log_likelihood':float(l),'quantity_class':'model-estimated predictive validation'})
+    pd.DataFrame(validation).to_csv(OUT/'cross_validation.csv',index=False)
+    pd.DataFrame(cells).to_csv(OUT/'cross_validation_cells.csv',index=False)
+
+
 def run(bootstrap=2000,workers=4):
     df=pd.read_csv(OUT/'endpoints_primary.csv');X,names,groups=design(df)
     lo,up=df.lower_EFC.to_numpy(),df.upper_EFC.to_numpy()
@@ -77,14 +94,7 @@ def run(bootstrap=2000,workers=4):
         for i,row in grid.iterrows():
             sensitivity.append({'variant':variant,'family':family,'temp':row.temp,'rate':row.rate,'cap':row.cap,'median_EFC':pred[i],'quantity_class':'model-estimated sensitivity'})
     pd.DataFrame(sensitivity).to_csv(OUT/'sensitivity_predictions.csv',index=False);save_json('sensitivity_models.json',models)
-    validation=[]
-    for family in ['weibull','lognormal']:
-        for rep in [1,2,3]:
-            hold=df.replicate.to_numpy()==rep;f=fit(X[~hold],lo[~hold],up[~hold],family=family)
-            assert f['success'],(family,rep,f)
-            ll,_=contributions(f['theta'],X[hold],lo[hold],up[hold],family)
-            validation.append({'family':family,'held_out_replicate':rep,'n_train':int((~hold).sum()),'n_test':int(hold.sum()),'held_out_log_likelihood':float(ll.sum()),'quantity_class':'model-estimated predictive validation'})
-    pd.DataFrame(validation).to_csv(OUT/'cross_validation.csv',index=False)
+    cross_validate(df,X,lo,up)
     save_json('analysis_summary.json',{'bootstrap_requested':bootstrap,'bootstrap_success':len(success),'seed':SEED,'shape':float(np.exp(params[-1])),
                                       'fit':point,'n_coefficients':len(names),'n_cells':len(df),'events':int(np.isfinite(up).sum()),
                                       'sensitivity_models':len(models),'quantity_class':'model-estimated'})

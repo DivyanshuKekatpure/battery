@@ -22,7 +22,7 @@ REFS=[KITREF,
 'Burkhardt, M. (2024, September 15). iPhone 16 Pro battery replacements will cost even more than last year. 9to5Mac. https://9to5mac.com/2024/09/15/iphone-16-pro-battery-replacement/ (accessed November 1, 2026; dated price scenario).',
 'Apple Inc. (2024). iPhone 16 and iPhone 16 Plus Product Environmental Report, p. 9. https://www.apple.com/environment/pdf/products/iphone/iPhone_16_and_iPhone_16_Plus_PER_Sept2024.pdf (accessed November 1, 2026).',
 'Aussems, M. (2025, July 4). iPhone battery twice as bad as Samsung: which manufacturer performs best? ITdaily. https://itdaily.com/blogs/workplace/iphone-battery-twice-as-bad-as-samsung-which-manufacturer-performs-best/ (accessed November 1, 2026; weak usage source).',
-'Apple Inc. (n.d.). Apple service and repair for iPhone battery. https://support.apple.com/iphone/repair/battery-replacement (accessed November 1, 2026; numeric pricing failed to load).']
+'Rossignol, J. (2026, September 17). Apple increases battery replacement fee for iPhone 18 Pro and Pro Max. MacRumors. https://www.macrumors.com/2026/09/17/apple-higher-iphone-18-pro-battery-fee/ (accessed November 1, 2026; Pro-model fees only).']
 
 
 def content():
@@ -38,10 +38,21 @@ def content():
     before=f[(f.rate==5)&(f.cap==100)].iloc[0];after=f[(f.rate==5)&(f.cap==90)].iloc[0]
     alt=sens[sens['case']=='primary_lognormal'].iloc[0]
     reg=pd.read_csv(OUT/'regression.csv');beta=reg[reg.term=='cap90'].iloc[0]
+    cells=pd.read_csv(OUT/'cross_validation_cells.csv');wcells=cells[cells.family=='weibull'].nsmallest(2,'held_out_log_likelihood')
+    lcells=cells[(cells.family=='lognormal')&cells.cell.isin(wcells.cell)]
+    assert (wcells.predicted_median_EFC<wcells.lower_EFC).all(),'worst cells should outlive predictions'
+    worst=wcells.held_out_log_likelihood.sum();rest_w=cv['weibull']-worst;rest_ln=cv['lognormal']-lcells.held_out_log_likelihood.sum()
+    describe=lambda r:f"{r.cell} ({r.temp}°C, {LABEL[r.rate]}, {r.cap}%)"
+    grid_sens=sens[sens['case']=='assumed_usage_transfer_and_dated_price']
+    usual=grid_sens[grid_sens.lifetime_multiplier<=1].savings_USD
+    doubled=grid_sens[(grid_sens.lifetime_multiplier==2)&(grid_sens.usage_EFC_day==0.7)&(grid_sens.price_USD==99)].savings_USD.iloc[0]
+    tied='both '+f"{tests.loc['rate:cap','p_holm']:.3f}" if round(tests.loc['rate:cap','p_holm'],3)==round(tests.loc['cap:temp','p_holm'],3) else f"{tests.loc['rate:cap','p_holm']:.3f} and {tests.loc['cap:temp','p_holm']:.3f}"
     values={'distribution_parameters':parameters,'preparation':prep,'analysis':analysis,'baseline_life_25C':a.to_dict(),'cap_life_25C':b.to_dict(),
             'primary_cap_ratio':contrast.to_dict(),'financial_baseline':before.to_dict(),'financial_intervention':after.to_dict(),
             'lognormal_financial':alt.to_dict(),'cross_validation_log_likelihood':cv.to_dict(),
-            'provenance':{'life':'predicted_life.csv','ratio':'cap_contrasts.csv','finance':'financial_strategies.csv','model_sensitivity':'financial_sensitivity.csv','counts':'preparation_summary.json','parameters':'model_parameters.json and distribution_parameters.csv'}}
+            'cross_validation_worst_weibull_cells':[{k:(None if isinstance(v,float) and math.isinf(v) else v) for k,v in r.items()} for r in wcells.to_dict('records')],'cross_validation_without_worst':{'weibull':rest_w,'lognormal':rest_ln},
+            'financial_sensitivity_range':{'multiplier_le_1_min':usual.min(),'multiplier_le_1_max':usual.max(),'multiplier_2_usage_0.7_price_99':doubled},
+            'provenance':{'life':'predicted_life.csv','ratio':'cap_contrasts.csv','finance':'financial_strategies.csv','model_sensitivity':'financial_sensitivity.csv','cross_validation':'cross_validation_cells.csv','counts':'preparation_summary.json','parameters':'model_parameters.json and distribution_parameters.csv'}}
     save_json('report_values.json',values)
     measures=text('''We measure standardized discharge capacity in ampere-hours, then divide by each cell's first valid reference capacity to calculate retention. Our main outcome is equivalent full cycles (EFC) until capacity first falls below 80% of that starting value. Tests are intermittent. We therefore bracket crossings between observations and right-censor cells that haven't crossed. EFC equals average cumulative charging and discharging throughput divided by nominal 3 Ah capacity, after subtracting baseline exposure. We include diagnostic operations and test operating-only exposure separately. We compare charging rate, regular-operation charging cap, and controlled bath temperature. Individual histories and threshold coverage show what we observed; life ratios, median lifetimes, survival probabilities and their confidence intervals come from the model (Luh & Blank, 2024).''')
     assumptions=text('''These 72 cells tell us about the KIT experiment. Generalizing to smartphones requires validation. We assume a common Weibull shape and independent cell variation within conditions, although shared baths limit independent temperature replication. Upper voltage gives approximate 90% or 100% caps without continuously recalibrating SOC. Capping changes cycle depth too, preventing isolation of one degradation mechanism. Diagnostics periodically charge both groups fully. We leave missing capacities missing and incomplete lifetimes censored, excluding three flagged cold measurements and the final manual check-up from primary analysis. Alternative models and inclusion rules test sensitivity. Phone projections assume transferable lifetime, constant usage and fresh replacement batteries. These assumptions remain unvalidated.''')
@@ -51,29 +62,29 @@ We fitted a Weibull accelerated-failure-time model: S(t|x)=exp[-(t/eta(x))^k], t
 
 Interval likelihoods use measured crossing brackets; survival likelihoods handle right-censored cells. We neither substitute midpoint failure times nor discard incomplete cases. Using seed 20261101, we refitted {analysis['bootstrap_requested']:,} whole-cell bootstrap samples within conditions, preserving joint shape/scale dependence when transforming parameters for percentile intervals. Repeated measurements aren't independent replicates.
 
-We tested interactions with Holm-adjusted likelihood-ratio tests. Three-fold validation withholds one replicate per condition; sensitivity checks vary capacity normalization, throughput, flagged/final measurements and shutdown assumptions. The lognormal alternative uses log(L/1000)=X beta_LN+sigma Z, Z standard normal, sigma={parameters['lognormal_sensitivity']['sigma']:.6f}; its scale equals its median (reference {parameters['lognormal_sensitivity']['reference_median_EFC']:,.3f} EFC). Secondary estimates have no bootstrap intervals.''')
-    results=text(f'''We analyzed {prep['primary_selected_measurements']} measurements from {prep['selected_cells']} cells, giving {prep['primary_crossings']} threshold-crossing intervals and {prep['primary_right_censored']} right-censored endpoints. We excluded eleven final-manual and three cold measurements without imputing any values. Each condition still has three physical cells. Figure 1 shows their histories; Figure 3 marks censoring with triangles.
+We tested interactions with Holm-adjusted likelihood-ratio tests. Three-fold validation withholds one replicate per condition; sensitivity checks vary capacity normalization, throughput, flagged/final measurements and shutdown assumptions. The lognormal alternative uses log(L/1000)=X beta_LN+sigma Z, Z standard normal, sigma={parameters['lognormal_sensitivity']['sigma']:.3f}; its scale equals its median (reference {parameters['lognormal_sensitivity']['reference_median_EFC']:,.0f} EFC). Secondary estimates have no bootstrap intervals.''')
+    results=text(f'''We analyzed {prep['primary_selected_measurements']} measurements from {prep['selected_cells']} cells, giving {prep['primary_crossings']} threshold-crossing intervals and {prep['primary_right_censored']} right-censored endpoints. We excluded eleven final-manual and three cold measurements without imputing any values. Figure 1 shows histories; Figure 3 marks censoring with triangles.
 
 At 25°C, uncapped median-life estimates are {get(1,100).median_EFC:,.0f}, {get(3,100).median_EFC:,.0f} and {a.median_EFC:,.0f} EFC at 1/3C, 1C and 5/3C. With capping, they rise to {get(1,90).median_EFC:,.0f}, {get(3,90).median_EFC:,.0f} and {b.median_EFC:,.0f}. At 5/3C, that's a life ratio of {contrast.life_ratio:.2f} (nominal 95% CI {contrast.ci_lo:.2f}–{contrast.ci_hi:.2f}); median intervals are {a.ci_lo:,.0f}–{a.ci_hi:,.0f} EFC uncapped and {b.ci_lo:,.0f}–{b.ci_hi:,.0f} capped. These describe fitted distributions. They aren't observed individual lifetimes.
 
-The common shape is {parameters['weibull_shape']['estimate']:.3f}; reference scale is {parameters['reference_scale_EFC']['estimate']:,.3f} EFC. Tables 2–3 give parameter intervals and regression coefficients. At 1C/25°C, cap90's coefficient is {beta.estimate:.3f} (95% CI {beta.ci_lo:.3f}–{beta.ci_hi:.3f}). Rate-by-temperature gives LR={tests.loc['rate:temp','LR']:.2f}, six degrees of freedom, Holm-adjusted p<0.001. Rate-by-cap and cap-by-temperature adjusted p-values are {tests.loc['rate:cap','p_holm']:.3f} and {tests.loc['cap:temp','p_holm']:.3f}; neither establishes identical benefits. Contrast intervals are unadjusted.
+The common shape is {parameters['weibull_shape']['estimate']:.2f}; reference scale is {parameters['reference_scale_EFC']['estimate']:,.0f} EFC. At 1C/25°C, cap90's coefficient is {beta.estimate:.2f} (95% CI {beta.ci_lo:.2f}–{beta.ci_hi:.2f}). Rate-by-temperature gives LR={tests.loc['rate:temp','LR']:.2f}, six degrees of freedom, Holm-adjusted p<0.001. Rate-by-cap and cap-by-temperature adjusted p-values are {tied}; neither establishes identical benefits. With three cells per condition, within-condition resampling likely understates uncertainty: several Table 3 interaction intervals exclude zero although Table 4 tests don't. We base interaction conclusions on Table 4.
 
 Temperature matters here. At uncapped 5/3C, modeled median life is {cold.median_EFC:,.0f} EFC at 0°C, {a.median_EFC:,.0f} at 25°C and {warm.median_EFC:,.0f} at 40°C (Figure 2), so this model doesn't support a temperature-independent rate penalty.
 
-All {analysis['bootstrap_success']:,} bootstrap fits converged. But Weibull predicted poorly: held-out log likelihood totals {cv['weibull']:.1f}, versus {cv['lognormal']:.1f} for lognormal (higher is better). That substantially weakens confidence in our prespecified family. Its intervals leave out distributional uncertainty.
+All {analysis['bootstrap_success']:,} bootstrap fits converged. But Weibull predicted poorly: held-out log likelihood totals {cv['weibull']:.1f}, versus {cv['lognormal']:.1f} for lognormal (higher is better). Two cells that outlived predictions, {describe(wcells.iloc[0])} and {describe(wcells.iloc[1])}, contribute {worst:.1f}; Weibull's steep shape makes such lives very unlikely. Without them, totals are {rest_w:.1f} versus {rest_ln:.1f}. We deliberately keep prespecified Weibull, with lognormal as the main robustness check.
 
 None of the three capped 1/3C/25°C cells crossed the threshold, so their estimated median exceeds measured follow-up. Fault-related shutdowns challenge independent censoring. Shared baths limit temperature replication, while full diagnostic charges and cylindrical, liquid-cooled cells restrict smartphone transfer. We need smartphone-cell validation before promising quantitative phone lifetimes.
 
-Nominal intervals assume the distribution, common shape and within-condition resampling. Lognormal's stronger validation score shows why between-model uncertainty needs separate attention. A positive fitted cap effect establishes neither a precise population benefit nor smartphone transfer.''')
-    financial=text(f'''We propose capping 5/3C charging at approximately 90% instead of 100%, at 25°C, as prespecified. In our three-year phone scenario, estimated replacement spending falls from {money(before.spend_USD)} to {money(after.spend_USD)}: {money(after.savings_USD)} saved per owner (nominal 95% cell-bootstrap interval {money(after.savings_ci_lo)}–{money(after.savings_ci_hi)}). These projections depend on KIT cells; we haven't observed phone savings (Luh & Blank, 2024).
+Nominal intervals assume the distribution and common shape. A positive fitted cap effect establishes neither a precise population benefit nor smartphone transfer.''')
+    financial=text(f'''We propose capping 5/3C charging at approximately 90% instead of 100%, at 25°C, as prespecified. In our three-year phone scenario, estimated replacement spending falls from {money(before.spend_USD)} to {money(after.spend_USD)}: {money(after.savings_USD)} saved per owner (nominal 95% cell-bootstrap interval {money(after.savings_ci_lo)}–{money(after.savings_ci_hi)}). The baseline, uncapped 5/3C, wears fastest, so this is essentially one avoided replacement: expected replacements fall from {before.expected_replacements:.3f} to {after.expected_replacements:.3f}. The upper bound exceeds one fee because some refits predict over one baseline replacement. These projections depend on KIT cells; we haven't observed phone savings (Luh & Blank, 2024).
 
-We use a September 2024 iPhone 16 fee estimate of $99, with $119 for Pro-model sensitivity (Burkhardt, 2024). Current pricing failed to load on Apple's page (Apple, n.d.). We assume zero additional fees, tax, shipping and implementation costs. Apple's three-year horizon and a weak review-site estimate of 0.7 nominal EFC/day give {fs['horizon_EFC']:.1f} EFC per strategy (Apple, 2024; Aussems, 2025). Equal delivered charge prevents crediting capping for smaller charges per session.
+We use a September 2024 iPhone 16 fee estimate of $99, with $119 for Pro-model sensitivity (Burkhardt, 2024). A September 2026 report confirms the $119 Pro fee and lists $129 for iPhone 18 Pro (Rossignol, 2026); we couldn't verify the current base fee. Savings scale proportionally with price. We assume zero additional fees, tax, shipping and implementation costs. Apple's three-year horizon and a weak review-site estimate of 0.7 nominal EFC/day give {fs['horizon_EFC']:.1f} EFC (Apple, 2024; Aussems, 2025). Equal delivered charge prevents crediting capping for smaller charges per session.
 
-We replace batteries at 80% initial capacity, assuming independent fresh replacement lives in a renewal calculation. S(t)=exp[-(t/eta)^k] uses common shape k={parameters['weibull_shape']['estimate']:.3f} (95% CI {parameters['weibull_shape']['ci_lo']:.3f}–{parameters['weibull_shape']['ci_hi']:.3f}), zero location and the tabulated strategy scales. We assume existing chargers, lifetime-transfer multiplier 1, no discounting and no separate calendar-aging model. Expected replacements fall from {before.expected_replacements:.3f} to {after.expected_replacements:.3f}; any-replacement probability falls from {100*before.replacement_probability:.1f}% to {100*after.replacement_probability:.1f}%. Break-even implementation spending is {money(after.savings_USD)} per owner. We don't price inconvenience in this financial scenario.
+We replace batteries at 80% initial capacity, assuming independent fresh replacement lives in a renewal calculation. S(t)=exp[-(t/eta)^k] uses common shape k={parameters['weibull_shape']['estimate']:.2f} (95% CI {parameters['weibull_shape']['ci_lo']:.2f}–{parameters['weibull_shape']['ci_hi']:.2f}), zero location and the tabulated strategy scales. We assume existing chargers, lifetime-transfer multiplier 1, no discounting and no separate calendar-aging model. Any-replacement probability falls from {100*before.replacement_probability:.1f}% to {100*after.replacement_probability:.1f}%. We don't price inconvenience.
 
-We calculate intervals from {analysis['bootstrap_success']:,} whole-cell bootstrap refits. The {fs['grid_step_EFC']:.2f}-EFC renewal grid agrees with separately labeled simulation; halving the step changes spending by less than {money(math.ceil(fs['half_step_max_USD_change']*100)/100)}. We test assumed usage of 0.5–1.0 EFC/day and lifetime multipliers 0.5/1/2 as sensitivities, not confidence bounds. Lognormal, with sigma={parameters['lognormal_sensitivity']['sigma']:.6f} and the listed medians, gives {money(alt.savings_USD)} savings without a secondary bootstrap.
+We calculate intervals from {analysis['bootstrap_success']:,} whole-cell bootstrap refits. The {fs['grid_step_EFC']:.2f}-EFC renewal grid agrees with separately labeled simulation; halving the step changes spending by less than {money(math.ceil(fs['half_step_max_USD_change']*100)/100)}. Across 0.5–1.0 EFC/day usage, both fees and lifetime multipliers 0.5–1, savings range ${usual.min():,.0f}–${usual.max():,.0f}. If phone batteries last twice as long as KIT cells, savings fall to {money(doubled)} at 0.7 EFC/day. These are sensitivities, not confidence bounds. Lognormal, with sigma={parameters['lognormal_sensitivity']['sigma']:.3f} and the listed medians, gives {money(alt.savings_USD)} savings without a secondary bootstrap.
 
-The horizon exceeds baseline measured follow-up, requiring extrapolation, and Weibull predicts held-out observations worse than lognormal. Phone transfer and everyday replacement behavior remain unvalidated. Positive conditional intervals leave those structural uncertainties out. I'd support funding validation and a pilot. We can't yet book fleet savings or guarantee benefits.''')
+The horizon exceeds baseline measured follow-up, requiring extrapolation, and Weibull predicts held-out observations worse than lognormal. Phone transfer and everyday replacement behavior remain unvalidated. Positive conditional intervals leave those structural uncertainties out. We'd support funding validation and a pilot. We can't yet book fleet savings or guarantee benefits.''')
     preliminary=[('Measures',measures),('Assumptions',assumptions),('Model / approach',approach),('Results',results)]
     finance=[('Financial Impacts',financial)]
     counts={k:words(v) for k,v in preliminary};counts['Financial Impacts']=words(financial)
@@ -141,22 +152,22 @@ def main():
     reg=pd.read_csv(OUT/'regression.csv');tests=pd.read_csv(OUT/'interaction_tests.csv')
     pred=pd.read_csv(OUT/'predicted_life.csv');pred=pred[pred.temp==25].merge(distributions,on=['temp','rate','cap'],validate='one_to_one',suffixes=('','_parameter'))
     desc=pd.read_csv(OUT/'descriptives.csv');aggregate=desc.groupby('temp')[['n','observed_crossings']].sum().reset_index()
-    interval=lambda p: f"{p['ci_lo']:,.3f}–{p['ci_hi']:,.3f}"
+    interval=lambda p,d: f"{p['ci_lo']:,.{d}f}–{p['ci_hi']:,.{d}f}"
     tables=[('Table 1. Derived endpoint coverage.',
              ['Bath °C','Cells','Crossings','Right-censored'],[[int(r.temp),int(r.n),int(r.observed_crossings),int(r.n-r.observed_crossings)] for r in aggregate.itertuples()]),
             ('Table 2. Estimated Weibull parameters: reference 1C/100%/25°C; location fixed.',
              ['Parameter','Estimate','95% CI'],
-             [['Shape k',f"{shape['estimate']:.3f}",interval(shape)],
-              ['Scale eta (EFC)',f"{scale['estimate']:,.3f}",interval(scale)],
-              ['Median (EFC)',f"{med['estimate']:,.3f}",interval(med)],
+             [['Shape k',f"{shape['estimate']:.2f}",interval(shape,2)],
+              ['Scale eta (EFC)',f"{scale['estimate']:,.0f}",interval(scale,0)],
+              ['Median (EFC)',f"{med['estimate']:,.0f}",interval(med,0)],
               ['Location (EFC)',0,'Fixed']]),
             ('Table 3. Fitted coefficients: bootstrap SE/CIs; intercept=log(reference eta/1000); log_shape=log(k).',
-             ['Term','Estimate','SE','95% CI'],[[r.term,f'{r.estimate:.5f}',f'{r.bootstrap_SE:.5f}',f'{r.ci_lo:.5f}–{r.ci_hi:.5f}'] for r in reg.itertuples()]),
+             ['Term','Estimate','SE','2.5%','97.5%'],[[r.term,f'{r.estimate:.2f}',f'{r.bootstrap_SE:.2f}',f'{r.ci_lo:.2f}',f'{r.ci_hi:.2f}'] for r in reg.itertuples()]),
             ('Table 4. Approximate interaction tests; Holm correction.',
              ['Interaction','LR','df','Raw p','Holm p'],[[r.interaction,f'{r.LR:.2f}',r.df,f'{r.p:.3g}',f'{r.p_holm:.3g}'] for r in tests.itertuples()]),
             ('Table 5. Estimated 25°C lifetimes/scales; *median beyond measured follow-up.',
              ['Rate','Cap','eta/EFC','95% CI','Median/EFC','95% CI'],
-             [[LABEL[r.rate],f'{r.cap}%',f'{r.weibull_scale_EFC:,.1f}',f'{r.scale_ci_lo:,.1f}–{r.scale_ci_hi:,.1f}',f'{r.median_EFC:,.0f}'+('*' if r.median_beyond_max_followup else ''),f'{r.ci_lo:,.0f}–{r.ci_hi:,.0f}'] for r in pred.itertuples()])]
+             [[LABEL[r.rate],f'{r.cap}%',f'{r.weibull_scale_EFC:,.0f}',f'{r.scale_ci_lo:,.0f}–{r.scale_ci_hi:,.0f}',f'{r.median_EFC:,.0f}'+('*' if r.median_beyond_max_followup else ''),f'{r.ci_lo:,.0f}–{r.ci_hi:,.0f}'] for r in pred.itertuples()])]
     counts=build('Preliminary_Methods_and_Results','Preliminary Methods and Results',prelim,tables,
           [('observed_25C.png','Figure 1. Measured 25°C retention; lines connect observations.'),
            ('modeled_life_by_temperature.png','Figure 2. Estimated medians/95% intervals; panel scales differ.'),
@@ -167,10 +178,10 @@ def main():
          ['Input','Value','Evidence status'],[[r.item,str(r.value)+' '+r.unit,r.quantity_class] for r in inputs.itertuples()]),
         ('Table 2. Estimated 25°C distribution inputs; lognormal values are point estimates.',
          ['Strategy','Weibull eta/EFC','95% CI','Lognormal median/EFC'],
-         [[f'{LABEL[r.rate]} {r.cap}%',f'{r.weibull_scale_EFC:,.3f}',f'{r.scale_ci_lo:,.3f}–{r.scale_ci_hi:,.3f}',f'{r.lognormal_median_EFC:,.3f}'] for r in pred.itertuples()]),
+         [[f'{LABEL[r.rate]} {r.cap}%',f'{r.weibull_scale_EFC:,.0f}',f'{r.scale_ci_lo:,.0f}–{r.scale_ci_hi:,.0f}',f'{r.lognormal_median_EFC:,.0f}'] for r in pred.itertuples()]),
         ('Table 3. Conditional spending/saving versus 5/3C/100%; 95% intervals.',
          ['Strategy','Replacements','Spending/USD','Saving/USD (95% CI)'],[[f'{LABEL[r.rate]} {r.cap}%',f'{r.expected_replacements:.3f}',money(r.spend_USD),f'{money(r.savings_USD)} ({money(r.savings_ci_lo)}–{money(r.savings_ci_hi)})'] for r in f.itertuples()])]
-    counts.update(build('Financial_Impacts','Financial Impacts',fin,ft,
+    counts.update(build('Financial_Impacts','Capping Fast Charging: Financial Impacts',fin,ft,
           [('conditional_costs.png','Figure 1. Conditional replacement spending; 95% intervals.'),
            ('conditional_annual_spend.png','Figure 2. Conditional cumulative replacement spending.')],REFS))
     save_json('report_word_counts.json',counts)

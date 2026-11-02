@@ -164,11 +164,49 @@
     "lognormal": -152.72340535276348,
     "weibull": -463.5623798667588
   },
+  "cross_validation_worst_weibull_cells": [
+    {
+      "family": "weibull",
+      "held_out_replicate": 1,
+      "cell": "P040_1",
+      "temp": 10,
+      "rate": 5,
+      "cap": 90,
+      "lower_EFC": 356.5499999999999,
+      "upper_EFC": 491.59999999999997,
+      "predicted_median_EFC": 189.88539866549922,
+      "held_out_log_likelihood": -238.4109840116038,
+      "quantity_class": "model-estimated predictive validation"
+    },
+    {
+      "family": "weibull",
+      "held_out_replicate": 3,
+      "cell": "P060_3",
+      "temp": 40,
+      "rate": 5,
+      "cap": 100,
+      "lower_EFC": 902.3666666666668,
+      "upper_EFC": null,
+      "predicted_median_EFC": 597.8508139756352,
+      "held_out_log_likelihood": -83.26915113009784,
+      "quantity_class": "model-estimated predictive validation"
+    }
+  ],
+  "cross_validation_without_worst": {
+    "weibull": -141.8822447250572,
+    "lognormal": -130.14260284484217
+  },
+  "financial_sensitivity_range": {
+    "multiplier_le_1_min": 42.39383591586003,
+    "multiplier_le_1_max": 236.71299880570857,
+    "multiplier_2_usage_0.7_price_99": 4.448690711558161
+  },
   "provenance": {
     "life": "predicted_life.csv",
     "ratio": "cap_contrasts.csv",
     "finance": "financial_strategies.csv",
     "model_sensitivity": "financial_sensitivity.csv",
+    "cross_validation": "cross_validation_cells.csv",
     "counts": "preparation_summary.json",
     "parameters": "model_parameters.json and distribution_parameters.csv"
   }

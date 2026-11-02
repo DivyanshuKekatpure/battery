@@ -9,21 +9,21 @@
     "Measures": 117,
     "Assumptions": 106,
     "Model / approach": 204,
-    "Results": 554,
-    "Financial Impacts": 445
+    "Results": 597,
+    "Financial Impacts": 499
   },
   "reports": [
     {
       "report": "Preliminary_Methods_and_Results",
       "tables": 5,
       "figures": 3,
-      "document_xml_sha256": "ec8a0e6bfa820610ffe2df396c6d501ca283f13310bbacd9683ddbc2199f52f2",
+      "document_xml_sha256": "4ae7fc834c0ba64151a7bfb326b4b5d8931978e055b2c1147364165607bfd6bb",
       "shared_narrative_verified": true,
       "rendered_section_word_counts": {
         "Measures": 117,
         "Assumptions": 106,
         "Model / approach": 204,
-        "Results": 554
+        "Results": 597
       },
       "assignment_headings_only": true
     },
@@ -31,10 +31,10 @@
       "report": "Financial_Impacts",
       "tables": 3,
       "figures": 2,
-      "document_xml_sha256": "fa00766ec660bbd6f9c178b46c4f1c2c5d00885157c3d4f0026d1844e51859f3",
+      "document_xml_sha256": "470f7b2c0d49c6a90b1bdd8af4d6fd88e7f530536220702e15ae4a2bfde27934",
       "shared_narrative_verified": true,
       "rendered_section_word_counts": {
-        "Financial Impacts": 445
+        "Financial Impacts": 499
       },
       "assignment_headings_only": true
     }

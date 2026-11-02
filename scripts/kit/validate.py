@@ -60,13 +60,13 @@ def main():
         assert len(doc.tables)>0
         table_text='\n'.join(' '.join(c.text for c in row.cells) for table in doc.tables for row in table.rows)
         complete_text=text+'\n'+table_text
-        assert f"{parameters['weibull_shape']['estimate']:.3f}" in complete_text
+        assert f"{parameters['weibull_shape']['estimate']:.2f}" in complete_text
         assert 'S(t' in text and 'location' in text.lower()
         for row in parameter_rows.itertuples():
-            # Preliminary scale uses one decimal; financial input table uses three.
-            displayed=f'{row.weibull_scale_EFC:,.1f}' if name=='Preliminary_Methods_and_Results' else f'{row.weibull_scale_EFC:,.3f}'
+            # Both reports round scales to whole EFC.
+            displayed=f'{row.weibull_scale_EFC:,.0f}'
             assert displayed in table_text,(name,displayed)
-        assert f"{parameters['lognormal_sensitivity']['sigma']:.6f}" in text
+        assert f"{parameters['lognormal_sensitivity']['sigma']:.3f}" in text
 
         assert not any(token in text for token in ['5,237','820.2','multistage','[insert','TODO','$4.55'])
         assert 'References' in text and 'https://doi.org/10.35097/1969' in text
