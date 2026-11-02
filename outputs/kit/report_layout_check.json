@@ -7,18 +7,18 @@
     "bibliography"
   ],
   "counts": {
-    "Measures": 125,
-    "Assumptions": 114,
-    "Model / approach": 212,
-    "Results": 564,
-    "Financial Impacts": 446
+    "Measures": 117,
+    "Assumptions": 106,
+    "Model / approach": 204,
+    "Results": 554,
+    "Financial Impacts": 445
   },
   "narrative_counts": {
-    "Measures": 125,
-    "Assumptions": 114,
-    "Model / approach": 212,
-    "Results": 312,
-    "Financial Impacts": 301
+    "Measures": 117,
+    "Assumptions": 106,
+    "Model / approach": 204,
+    "Results": 302,
+    "Financial Impacts": 300
   },
   "existing_observations_fits_financial_estimates_unchanged": true,
   "repeated_word_xml_identical": true
