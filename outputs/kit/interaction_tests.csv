@@ -1,0 +1,4 @@
+interaction,LR,df,p,quantity_class,p_holm
+rate:cap,3.1328520956678005,2,0.20879005616596918,model-estimated; approximate test,0.3717417416027304
+rate:temp,75.53279542276942,6,2.9814783390078873e-14,model-estimated; approximate test,8.944435017023662e-14
+cap:temp,4.814810184689236,3,0.1858708708013652,model-estimated; approximate test,0.3717417416027304

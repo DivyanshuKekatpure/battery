@@ -1,0 +1,18 @@
+{
+  "bootstrap_requested": 2000,
+  "bootstrap_success": 2000,
+  "seed": 20261101,
+  "shape": 7.018279459380847,
+  "fit": {
+    "nll": 96.7070271598931,
+    "gradient_max": 0.0003814212842523368,
+    "success": true,
+    "attempts": 1,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
+  },
+  "n_coefficients": 18,
+  "n_cells": 72,
+  "events": 63,
+  "sensitivity_models": 7,
+  "quantity_class": "model-estimated"
+}

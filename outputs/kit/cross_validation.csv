@@ -1,0 +1,7 @@
+family,held_out_replicate,n_train,n_test,held_out_log_likelihood,quantity_class
+weibull,1,48,24,-290.33336483613664,model-estimated predictive validation
+weibull,2,48,24,-35.97765491693717,model-estimated predictive validation
+weibull,3,48,24,-137.251360113685,model-estimated predictive validation
+lognormal,1,48,24,-47.09517778683915,model-estimated predictive validation
+lognormal,2,48,24,-32.46522472410415,model-estimated predictive validation
+lognormal,3,48,24,-73.16300284182017,model-estimated predictive validation
