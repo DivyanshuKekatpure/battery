@@ -1,60 +1,44 @@
-# Fast-charging battery degradation: data extraction
+# Charging rate, charging cap, and battery degradation — KIT study
 
-Per-cell and per-cycle tables extracted from the Severson et al. (2019) and Attia et al. (2020)
-fast-charging datasets: A123 APR18650M1A LFP/graphite cells, 1.1 Ah nominal, cycled at 30 °C
-with a 4C discharge.
+This repository now analyzes real KIT version 2 NMC/graphite–SiO aging measurements. The primary study contains 72 cells: three charging rates × two caps × four controlled bath temperatures × three replicates, with discharge fixed at 1C.
 
-## Data
+## Deliverables
 
-The raw files (~11 GB) are not in this repo. Download them from data.matr.io into `data/raw/`:
+- [Preliminary Methods and Results](outputs/reports/Preliminary_Methods_and_Results.docx) and [editable Markdown](outputs/reports/Preliminary_Methods_and_Results.md)
+- [Financial Impacts](outputs/reports/Financial_Impacts.docx) and [editable Markdown](outputs/reports/Financial_Impacts.md)
+- [Assignment](outputs/reports/task.txt)
+- [Current decision log](docs/decision_log.md), [prespecified methods](docs/kit_methods.md), and [historical decisions](docs/old_decision_log.md)
 
-```bash
-mkdir -p data/raw
-curl -L -o data/raw/2017-05-12_batchdata_updated_struct_errorcorrect.mat https://data.matr.io/1/api/v1/file/5c86c0b5fa2ede00015ddf66/download
-curl -L -o data/raw/2017-06-30_batchdata_updated_struct_errorcorrect.mat https://data.matr.io/1/api/v1/file/5c86bf13fa2ede00015ddd82/download
-curl -L -o data/raw/2018-04-12_batchdata_updated_struct_errorcorrect.mat https://data.matr.io/1/api/v1/file/5c86bd64fa2ede00015ddbb2/download
-curl -L -o data/raw/2019-01-24_batchdata_updated_struct_errorcorrect.mat https://data.matr.io/1/api/v1/file/5dcef152110002c7215b2c90/download
-```
+## Reproduce
 
-Reference code from the authors (used to confirm conventions, not run here):
-- https://github.com/rdbraatz/data-driven-prediction-of-battery-cycle-life-before-capacity-degradation (official loaders and paper curation)
-- https://github.com/chueh-ermon/BMS-autoanalysis (how `cycle_life`, `chargetime` and the summary fields were computed)
-- https://github.com/chueh-ermon/automate-Arbin-schedule-file-creation (4-step policy format)
-- https://github.com/petermattia/battery-parameter-spaces (2019-01-24 validation batch; `Validation/final_results.csv`)
-
-## Run
+Requires Python 3.13, `pdftotext` for the historical ISU audit only, and the already-downloaded KIT v2 result package in `data2/`. The active pipeline does not require the 82 GB continuous logs or any network download.
 
 ```bash
 python3 -m venv .venv
-.venv/bin/pip install h5py numpy pandas scipy
-.venv/bin/python scripts/inspect_structure.py data/raw/2017-05-12_batchdata_updated_struct_errorcorrect.mat
-.venv/bin/python scripts/extract_summary.py   # cell_summary, capacity_curves, batch_report
-.venv/bin/python scripts/extract_full.py      # cycle_summary, early_features, discharge_curves.h5, full_report
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m scripts.run_kit
 ```
 
-## Outputs
+The single command checks supplied checksums, extracts real reference capacities, fits censored lifetime models with 2,000 cell-bootstrap samples, calculates conditional financial projections, renders figures and both report formats, runs tests and acceptance checks, and publishes reports only after checks pass. The one-time historical archive has already been completed; do not rerun `scripts.kit.migrate`.
 
-| File | Contents |
-|---|---|
-| `outputs/cell_summary.csv` | One row per cell (185): policy (parsed), stored and checked cycle life, curation status, cycle 2–100 means of charge time, temperature and IR |
-| `outputs/capacity_curves.csv` | Long format: batch, cell_id, cycle, discharge_capacity_Ah, merged_cell_id, merged_cycle |
-| `outputs/cycle_summary.csv` | Every summary field for every cycle of every cell, with merged ids/cycles |
-| `outputs/early_features.csv` | Early-life features per cell (ΔQ₁₀₀₋₁₀(V) statistics, fade slopes, charge time, IR, temperature) |
-| `outputs/batch_report.txt`, `outputs/full_report.txt` | Checks, missing-data counts and extraction notes |
-| `outputs/discharge_curves.h5` | *Not in git (142 MB).* Qdlin / Tdlin / dQdV on the 1000-point voltage grid for cycles 1–100, every 50th cycle and the last cycle |
+## Evidence and limitations
 
-Cell ids are `b<batch>c<index>`: b1 = 2017-05-12, b2 = 2017-06-30, b3 = 2018-04-12, b4 = 2019-01-24.
+Observed capacities, source archive member names and original CSV row numbers are in `outputs/kit/observations.csv`. Derived lifetime intervals are in `endpoints_primary.csv`; predictions, regression, bootstrap fits and financial estimates are separate artifacts under `outputs/kit/`. Missing capacities are never filled and interval-censored failures are not replaced with guessed exact times. Synthetic fixtures and Monte Carlo samples are explicitly labeled software/numerical validation, never experimental observations.
 
-## Conventions and caveats
+The measured design has 63 observed crossings and nine right-censored cells. Weibull is the prespecified primary model, but lognormal performs substantially better on held-out interval likelihood. Reports disclose this model uncertainty. Temperature effects are conditional on shared bath apparatus. The phone-cost example assumes transfer from cylindrical, liquid-cooled KIT cells; that transfer has not been validated. Prices are explicitly dated scenarios, and usage is an assumption with weak evidence. Do not treat projections as observed or guaranteed smartphone savings.
 
-- **Nothing is filled or estimated.** Missing values stay blank and are listed in the reports.
-- **Zeros are placeholders.** Cycle 1 is all zeros in b1–b3, and IR is all zeros in every b4 cell. Zeros are excluded from means and fits.
-- **`chargetime`** is the time for charge capacity to reach 0.88 Ah (80% of nominal), in minutes. 20 min means "never reached" and is excluded.
-- **`cycle_life_check`** uses the authors' rule: the first cycle below 0.88 Ah whose next cycle is lower still.
-- **Paper curation**, in the `paper_status` column:
-  - `used_merged`: b1c0–4 continue in batch 2 as b2c7, 8, 9, 15, 16 (`continuation_of_*`). `cycle_life_merged`, `merged_cell_id` and `merged_cycle` join them.
-  - `removed_no_eol`: b1c8, 10, 12, 13, 22.
-  - `removed_noisy`: b3c2, 23, 32, 37, 42, 43.
-  - `used` + `used_merged` = the 124 cells of Severson et al. (2019). `attia2020_validation` = the 45 cells of the 2019-01-24 batch.
-- **Policies.** Two-step policies, including `-newstructure` ones, fill `step1_rate_C`, `switch_soc_percent` and `step2_rate_C`. Four-step b4 policies fill `CC1_C`–`CC4_C` (each step covers 20% SOC, from 0 to 80%). Six b2 policy strings are truncated in the source and are left unparsed.
-- **b1c18:** raw within-cycle time appears to be in seconds, so its temperature integral is blank.
+Useful outputs include:
+
+- `outputs/kit/preparation_summary.json`, `cell_inclusion.csv`, `descriptives.csv`: measured-data coverage and decisions.
+- `regression.csv`, `interaction_tests.csv`, `predicted_life.csv`, `cap_contrasts.csv`: model estimates with nominal intervals.
+- `cross_validation.csv`, `sensitivity_predictions.csv`: robustness and predictive checks.
+- `financial_strategies.csv`, `financial_sensitivity.csv`, `annual_cost.csv`: conditional money calculations.
+- `outputs/kit/sources/`: cited source register and explicitly classified monetary assumptions.
+- `report_values.json`, `report_word_counts.json`, `acceptance_checks.json`: report provenance and checks.
+- `outputs/kit_audit/`: full archive and 228-cell audit.
+
+Raw downloads remain untracked. The supplied data are Luh & Blank (2024), KIT version 2 result data, DOI [10.35097/1969](https://doi.org/10.35097/1969), under CC BY 4.0. Cite the accompanying [Scientific Data paper](https://doi.org/10.1038/s41597-024-03831-x) and distinguish this project's derived analysis.
+
+## History
+
+The obsolete LFP pipeline/reports are preserved under `legacy/lfp/`; the alternative ISU audit is under `legacy/isu/`. [Archive manifest](legacy/archive_files.csv) records original paths and SHA256 hashes. These materials are historical, not active findings. Raw `data/` and `data2/` were not moved. Major implementation milestones are local Git commits; nothing has been pushed.

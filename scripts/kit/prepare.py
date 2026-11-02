@@ -47,7 +47,7 @@ def make_endpoints(obs, selected, variant='primary'):
         else:lo,hi,event=x[-1],np.inf,'right'
         if variant=='pessimistic_shutdown' and event=='right' and c['termination_reason']!='survivor':
             # Explicitly assumed sensitivity event, never written as measured failure.
-            hi=lo; event='assumed_exact_shutdown'
+            hi=max(lo,c['last_logged_total_EFC']-g.total_EFC.iloc[0]); event='assumed_shutdown_interval' if hi>lo else 'assumed_exact_shutdown_boundary'
         rows.append({**c,'lower_EFC':lo,'upper_EFC':hi,'event_type':event,
                      'n_checkups':len(g),'initial_capacity_Ah':g.capacity_Ah.iloc[0],
                      'last_retention':g.capacity_Ah.iloc[-1]/denominator,
@@ -65,6 +65,7 @@ def main():
     cfg['cap']=np.where(cfg.upper_voltage_V<4.19,90,100)
     cfg['temp']=cfg.temperature_degC.astype(int)
     cfg['selected']=(cfg.aging_type=='cyclic') & np.isclose(cfg.discharge_rate_C,1) & np.isclose(cfg.lower_voltage_V,3.249)
+    cfg=cfg.merge(pd.read_csv(ROOT/'outputs/kit_audit/capacity_inventory.csv')[['cell','last_logged_total_EFC','last_logged_timestamp_s']],on='cell',validate='one_to_one')
     selected=cfg[cfg.selected].sort_values(['temp','rate','cap','replicate'])
     assert len(selected)==72 and selected.groupby(['temp','rate','cap']).size().eq(3).all()
     cfg['inclusion_reason']=np.where(cfg.selected,'primary factorial design','outside prespecified fixed-discharge/fixed-lower-voltage design')

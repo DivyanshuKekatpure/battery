@@ -1,0 +1,7 @@
+{
+  "csv_changed": [],
+  "all_numerical_csv_byte_identical": true,
+  "report_paragraphs_identical": true,
+  "rerun_command": ".venv/bin/python -m scripts.run_kit",
+  "interpretation": "Rebuilt all stages from supplied ZIPs with fixed seed and declared environment; predictions are estimates, not new data."
+}

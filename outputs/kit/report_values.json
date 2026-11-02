@@ -1,0 +1,129 @@
+{
+  "preparation": {
+    "selected_cells": 72,
+    "conditions": 24,
+    "all_reference_measurements": 3999,
+    "selected_measurements": 873,
+    "primary_selected_measurements": 859,
+    "cold_excluded_all": 3,
+    "manual_excluded_selected": 11,
+    "primary_crossings": 63,
+    "primary_right_censored": 9,
+    "term_reasons": {
+      "EOL_cap": 34,
+      "EOL_cap/imp": 3,
+      "Meas Err (over T)": 3,
+      "dQ+ err": 6,
+      "dSoc+ err": 15,
+      "survivor": 11
+    },
+    "source": "KIT v2 results DOI 10.35097/1969; source_file/source_row refer to EOC archive member and CSV row",
+    "method": "Measured capacity unfilled; retention and lifetime intervals derived; pessimistic shutdown variant explicitly assumed."
+  },
+  "analysis": {
+    "bootstrap_requested": 2000,
+    "bootstrap_success": 2000,
+    "seed": 20261101,
+    "shape": 7.018279459380847,
+    "fit": {
+      "nll": 96.7070271598931,
+      "gradient_max": 0.0003814212842523368,
+      "success": true,
+      "attempts": 1,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH"
+    },
+    "n_coefficients": 18,
+    "n_cells": 72,
+    "events": 63,
+    "sensitivity_models": 7,
+    "quantity_class": "model-estimated"
+  },
+  "baseline_life_25C": {
+    "temp": 25,
+    "rate": 5,
+    "cap": 100,
+    "median_EFC": 563.4663688967469,
+    "ci_lo": 370.89325123640543,
+    "ci_hi": 789.6955729534769,
+    "quantity_class": "model-estimated",
+    "min_followup_EFC": 407.63999999999993,
+    "max_followup_EFC": 605.5133333333333,
+    "median_beyond_max_followup": false
+  },
+  "cap_life_25C": {
+    "temp": 25,
+    "rate": 5,
+    "cap": 90,
+    "median_EFC": 1126.6511291173963,
+    "ci_lo": 560.9593943132304,
+    "ci_hi": 1323.2299363015711,
+    "quantity_class": "model-estimated",
+    "min_followup_EFC": 563.3783333333333,
+    "max_followup_EFC": 2040.0266666666666,
+    "median_beyond_max_followup": false
+  },
+  "primary_cap_ratio": {
+    "temp": 25,
+    "rate": 5,
+    "comparison": "90% / 100% life ratio",
+    "life_ratio": 1.9995002209685575,
+    "ci_lo": 1.306887553928604,
+    "ci_hi": 2.91907755599511,
+    "quantity_class": "model-estimated"
+  },
+  "financial_baseline": {
+    "temp": 25,
+    "rate": 5,
+    "cap": 100,
+    "expected_replacements": 1.006278263165691,
+    "replacement_probability": 0.9975426173797428,
+    "prob_ci_lo": 0.38754305823706475,
+    "prob_ci_hi": 1.0,
+    "spend_USD": 99.62154805340342,
+    "spend_ci_lo": 38.36682234719419,
+    "spend_ci_hi": 164.22046665763148,
+    "savings_USD": 0.0,
+    "savings_ci_lo": 0.0,
+    "savings_ci_hi": 0.0,
+    "cost_per_1000_EFC_USD": 118.39616049449988,
+    "quantity_class": "model-estimated; conditional phone scenario"
+  },
+  "financial_intervention": {
+    "temp": 25,
+    "rate": 5,
+    "cap": 90,
+    "expected_replacements": 0.045372082171247205,
+    "replacement_probability": 0.04537147113805882,
+    "prob_ci_lo": 0.0014546751053103294,
+    "prob_ci_hi": 0.9999765266691595,
+    "spend_USD": 4.4918361349534734,
+    "spend_ci_lo": 0.144012835668449,
+    "spend_ci_hi": 99.036575156172,
+    "savings_USD": 95.12971191844994,
+    "savings_ci_lo": 12.970487046666426,
+    "savings_ci_hi": 139.16408617538272,
+    "cost_per_1000_EFC_USD": 25.673228624008594,
+    "quantity_class": "model-estimated; conditional phone scenario"
+  },
+  "lognormal_financial": {
+    "case": "primary_lognormal",
+    "usage_EFC_day": 0.7,
+    "lifetime_multiplier": 1.0,
+    "price_USD": 99.0,
+    "baseline_USD": 103.08496066680688,
+    "cap90_USD": 22.84843110512055,
+    "savings_USD": 80.23652956168632,
+    "quantity_class": "model-estimated sensitivity"
+  },
+  "cross_validation_log_likelihood": {
+    "lognormal": -152.72340535276348,
+    "weibull": -463.5623798667588
+  },
+  "provenance": {
+    "life": "predicted_life.csv",
+    "ratio": "cap_contrasts.csv",
+    "finance": "financial_strategies.csv",
+    "model_sensitivity": "financial_sensitivity.csv",
+    "counts": "preparation_summary.json"
+  }
+}

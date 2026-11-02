@@ -36,7 +36,7 @@ def run(bootstrap=2000,workers=4):
         for i,result in enumerate(pool.map(bootstrap_one,jobs,chunksize=10),1):
             boot.append(result)
             if i%200==0:print(f'Bootstrap {i}/{bootstrap}',flush=True)
-    boot=pd.DataFrame(boot);boot.to_csv(OUT/'bootstrap_fits.csv',index=False)
+    boot=pd.DataFrame(boot);boot['quantity_class']='model-estimated bootstrap refits';boot.to_csv(OUT/'bootstrap_fits.csv',index=False)
     success=boot[boot.success];assert len(success)>=.95*bootstrap,f'Only {len(success)} valid bootstrap fits'
     ps=success[[f'p{i}' for i in range(len(params))]].to_numpy()
     reg=pd.DataFrame({'term':names+['log_shape'],'estimate':params,'ci_lo':np.quantile(ps,.025,axis=0),'ci_hi':np.quantile(ps,.975,axis=0),'bootstrap_SE':ps.std(axis=0,ddof=1)})
@@ -44,7 +44,11 @@ def run(bootstrap=2000,workers=4):
     grid=scenarios();G,_,_=design(grid);grid['median_EFC']=median(params,G)
     med=np.array([median(p,G) for p in ps])
     grid['ci_lo'],grid['ci_hi']=np.quantile(med,[.025,.975],axis=0)
-    grid['quantity_class']='model-estimated';grid.to_csv(OUT/'predicted_life.csv',index=False)
+    grid['quantity_class']='model-estimated'
+    support=df.groupby(['temp','rate','cap']).last_EFC.agg(['min','max']).reset_index().rename(columns={'min':'min_followup_EFC','max':'max_followup_EFC'})
+    grid=grid.merge(support,on=['temp','rate','cap'],sort=False)
+    grid['median_beyond_max_followup']=grid.median_EFC>grid.max_followup_EFC
+    grid.to_csv(OUT/'predicted_life.csv',index=False)
     contrasts=[]
     for t in [0,10,25,40]:
         for r in [1,3,5]:

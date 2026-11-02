@@ -1,3 +1,5 @@
-# Migration archive manifest
+# Completed migration archive
 
-After replacement stages pass, legacy/lfp/ will hold superseded scripts and outputs (including three old Word reports), retaining their internal structure. legacy/isu/ will hold the alternative ISU audit and audit script. Historical decision log remains docs/old_decision_log.md. Raw data/ and data2/ and outputs/reports/task.txt are preserved. Original file paths and SHA256 hashes will be recorded during movement. Existing .gitignore edits belong to the user and will not be staged. No remote push.
+Legacy LFP scripts, tables, figures, specifications and three Word reports were moved to legacy/lfp/. The ISU audit and script were moved to legacy/isu/. legacy/archive_files.csv records every original path, destination, file size and SHA256 hash; every moved file was checked after movement. These are historical artifacts, not active KIT findings.
+
+Raw data/ and data2/, outputs/reports/task.txt, historical decisions and the pre-existing user .gitignore changes remain intact. Only the new KIT runner writes active reports, after validation. Git commits remain local.

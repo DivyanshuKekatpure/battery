@@ -149,6 +149,8 @@ def main():
                                   initial_capacity_Ah=initial, final_capacity_Ah=points[-1]["capacity_Ah"],
                                   final_retention_initial=points[-1]["retention_initial"],
                                   final_total_EFC=points[-1]["total_EFC"],
+                                  last_logged_total_EFC=(number(r, "total_q_chg_sum_Ah") + number(r, "total_q_dischg_sum_Ah"))/6,
+                                  last_logged_timestamp_s=last_timestamp,
                                   first_80pct_initial_lower_EFC=lo, first_80pct_initial_upper_EFC=hi,
                                   first_80pct_rated_lower_EFC=nominal_lo, first_80pct_rated_upper_EFC=nominal_hi))
     write_csv("capacity_checkups.csv", capacities)

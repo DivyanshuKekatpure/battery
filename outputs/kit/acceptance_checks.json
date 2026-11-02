@@ -1,0 +1,30 @@
+{
+  "primary_design_valid": true,
+  "source_columns_present": true,
+  "bootstrap_count": 2000,
+  "bootstrap_success": 2000,
+  "financial_identity_valid": true,
+  "word_limits": {
+    "Measures": 125,
+    "Assumptions": 114,
+    "Model / approach": 217,
+    "Results": 424,
+    "Financial Impacts": 354
+  },
+  "reports": [
+    {
+      "report": "Preliminary_Methods_and_Results",
+      "tables": 4,
+      "figures": 3,
+      "document_xml_sha256": "94c50bf5817851bb0fd3e6a35053a42e1f1574628c42cdcdc431cdefdccf3142",
+      "shared_narrative_verified": true
+    },
+    {
+      "report": "Financial_Impacts",
+      "tables": 2,
+      "figures": 2,
+      "document_xml_sha256": "5e3caae774ca3fc4405f8c857b5bc19723e84751ae5e380a34e8014bac5e187e",
+      "shared_narrative_verified": true
+    }
+  ]
+}
