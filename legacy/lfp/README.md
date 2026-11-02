@@ -40,6 +40,7 @@ python3 -m venv .venv
 | `outputs/capacity_curves.csv` | Long format: batch, cell_id, cycle, discharge_capacity_Ah, merged_cell_id, merged_cycle |
 | `outputs/cycle_summary.csv` | Every summary field for every cycle of every cell, with merged ids/cycles |
 | `outputs/early_features.csv` | Early-life features per cell (ΔQ₁₀₀₋₁₀(V) statistics, fade slopes, charge time, IR, temperature) |
+| `outputs/dataset_dictionary.csv` | Data dictionary for `outputs/sim_results.csv` and its inputs: one row per variable with unit, levels or range, definition, source and caveat (`scripts/build_dataset_dictionary.py`) |
 | `outputs/batch_report.txt`, `outputs/full_report.txt` | Checks, missing-data counts and extraction notes |
 | `outputs/discharge_curves.h5` | *Not in git (142 MB).* Qdlin / Tdlin / dQdV on the 1000-point voltage grid for cycles 1–100, every 50th cycle and the last cycle |
 
