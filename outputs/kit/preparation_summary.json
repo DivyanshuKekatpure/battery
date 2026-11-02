@@ -1,0 +1,21 @@
+{
+  "selected_cells": 72,
+  "conditions": 24,
+  "all_reference_measurements": 3999,
+  "selected_measurements": 873,
+  "primary_selected_measurements": 859,
+  "cold_excluded_all": 3,
+  "manual_excluded_selected": 11,
+  "primary_crossings": 63,
+  "primary_right_censored": 9,
+  "term_reasons": {
+    "EOL_cap": 34,
+    "EOL_cap/imp": 3,
+    "Meas Err (over T)": 3,
+    "dQ+ err": 6,
+    "dSoc+ err": 15,
+    "survivor": 11
+  },
+  "source": "KIT v2 results DOI 10.35097/1969; source_file/source_row refer to EOC archive member and CSV row",
+  "method": "Measured capacity unfilled; retention and lifetime intervals derived; pessimistic shutdown variant explicitly assumed."
+}
