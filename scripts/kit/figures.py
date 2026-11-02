@@ -52,4 +52,24 @@ def main():
     ax.set(xlabel='Equivalent full cycles',ylabel='Model-estimated survival probability',title='Weibull AFT survival at 25°C; extrapolation beyond observations')
     ax.legend(ncol=2,fontsize=8);ax.grid(alpha=.15);finish(fig,'modeled_survival_25C.png')
 
-if __name__=='__main__':main()
+def financial_figures():
+    d=pd.read_csv(OUT/'financial_strategies.csv')
+    fig,ax=plt.subplots(figsize=(9,4))
+    x=np.arange(len(d))
+    ax.errorbar(x,d.spend_USD,yerr=[d.spend_USD-d.spend_ci_lo,d.spend_ci_hi-d.spend_USD],fmt='o',capsize=4,color='#255a8f')
+    ax.set_xticks(x,[f'{LABEL[r.rate]}\n{r.cap}%' for r in d.itertuples()])
+    ax.set(ylabel='Estimated replacement spending (USD)',xlabel='Charging rate and cap',title='Conditional three-year phone scenario at 25°C')
+    ax.grid(axis='y',alpha=.2)
+    fig.text(.5,-.04,'Dated $99 repair cost; 0.7 EFC/day assumed. Bars: nominal 95% Weibull cell-bootstrap CI.',ha='center',fontsize=9)
+    fig.tight_layout();finish(fig,'conditional_costs.png')
+    a=pd.read_csv(OUT/'annual_cost.csv')
+    fig,ax=plt.subplots(figsize=(8,4))
+    for cap in [100,90]:
+        g=a[(a.rate==5)&(a.cap==cap)]
+        ax.errorbar(g.year,g.spend_USD,yerr=[g.spend_USD-g.ci_lo,g.ci_hi-g.spend_USD],fmt='o-',capsize=4,color=COLORS[cap],label=f'5/3C, {cap}%')
+    ax.set(xlabel='Year of assumed ownership',ylabel='Estimated replacement spending (USD)',title='Primary intervention: 90% cap at unchanged charging rate')
+    ax.set_xticks([1,2,3]);ax.legend();ax.grid(alpha=.15);fig.tight_layout();finish(fig,'conditional_annual_spend.png')
+
+if __name__=='__main__':
+    main()
+    if (OUT/'financial_strategies.csv').exists():financial_figures()

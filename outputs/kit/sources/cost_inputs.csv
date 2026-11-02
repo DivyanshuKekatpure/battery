@@ -1,0 +1,7 @@
+item,value,unit,quantity_class,source_id,note
+battery_replacement_price,99,USD,sourced_dated_estimate,burkhardt2024,2024 iPhone 16 out-of-warranty fee; not verified as current
+price_sensitivity,119,USD,sourced_dated_alternative,burkhardt2024,2024 Pro-model fee; alternative scenario not same-model price confidence interval
+ownership_years,3,years,assumed_with_source,apple2024,Apple first-owner use assumption adopted as horizon not measured ownership
+usage_EFC_day,0.7,nominal EFC/day,assumed_with_weak_source,aussems2025,Review-site estimate without published sampling method
+incremental_implementation_cost,0,USD,assumed,study_protocol,Existing charger; policy change assumed free
+additional_service_fee,0,USD,assumed,study_protocol,Published repair fee treated as per-event cost; excludes tax shipping and other fees

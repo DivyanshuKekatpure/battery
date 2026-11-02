@@ -1,0 +1,26 @@
+case,usage_EFC_day,lifetime_multiplier,price_USD,baseline_USD,cap90_USD,savings_USD,quantity_class
+assumed_usage_transfer_and_dated_price,0.5,0.5,99.0,141.55540008005224,42.882173829476145,98.67322625057608,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.5,0.5,119.0,170.1524506012749,51.54523924957233,118.60721135170256,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.5,1.0,99.0,42.82629467585251,0.43245875999248046,42.39383591586003,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.5,1.0,119.0,51.47807137804494,0.5198241660515674,50.958247211993374,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.5,2.0,99.0,0.4317025401606498,0.0033432933295859954,0.4283592468310638,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.5,2.0,119.0,0.5189151745365387,0.004018706123441752,0.5148964684130969,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.7,0.5,99.0,217.82940980292182,99.62691692720162,118.20249287572018,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.7,0.5,119.0,261.83535117724944,119.75356681148479,142.08178436576466,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.7,1.0,99.0,99.62154805340339,4.491836134953474,95.12971191844991,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.7,1.0,119.0,119.7471133167172,5.399277778378419,114.34783553833878,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.7,2.0,99.0,4.48414522001166,0.03545450845349934,4.448690711558161,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,0.7,2.0,119.0,5.390033143246339,0.04261703541380223,5.347416107832537,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,1.0,0.5,99.0,338.6005398758892,141.67123834845094,196.92930152743824,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,1.0,0.5,119.0,407.00468934576577,170.29169054005717,236.71299880570857,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,1.0,1.0,99.0,141.59181377364882,42.88218796739782,98.70962580625101,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,1.0,1.0,119.0,170.19622059660819,51.5452562436398,118.65096435296839,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,1.0,2.0,99.0,42.826308764863036,0.432458760854522,42.39385000400852,model-estimated sensitivity; inputs assumed or dated
+assumed_usage_transfer_and_dated_price,1.0,2.0,119.0,51.478088313320214,0.5198241670877588,50.95826414623246,model-estimated sensitivity; inputs assumed or dated
+primary_lognormal,0.7,1.0,99.0,103.08496066680688,22.84843110512055,80.23652956168632,model-estimated sensitivity
+rated_capacity_weibull,0.7,1.0,99.0,100.05986816210212,8.983526855359903,91.07634130674222,model-estimated sensitivity
+operating_EFC_weibull,0.7,1.0,99.0,99.99864782224198,4.927713941665951,95.07093388057602,model-estimated sensitivity
+include_cold_weibull,0.7,1.0,99.0,99.62155410526665,4.491853300323581,95.12970080494307,model-estimated sensitivity
+include_manual_weibull,0.7,1.0,99.0,99.85895579360768,4.545240474980659,95.31371531862702,model-estimated sensitivity
+include_all_weibull,0.7,1.0,99.0,99.85895579360768,4.545240474980659,95.31371531862702,model-estimated sensitivity
+pessimistic_shutdown_weibull,0.7,1.0,99.0,101.4526114930765,4.412672237327979,97.03993925574851,model-estimated sensitivity

@@ -1,0 +1,13 @@
+{
+  "horizon_EFC": 766.4999999999999,
+  "price_USD_dated_2024": 99.0,
+  "baseline_index": 4,
+  "primary_intervention_index": 5,
+  "break_even_implementation_USD": 95.12971191844994,
+  "grid_step_EFC": 0.25,
+  "half_step_max_USD_change": 0.011824175108888113,
+  "bootstrap_models": 2000,
+  "scope": "conditional phone scenario; no calibrated cylindrical-to-phone transfer; no calendar submodel",
+  "financial_inputs_class": "assumed usage and horizon; dated sourced repair price",
+  "quantity_class": "model-estimated"
+}
