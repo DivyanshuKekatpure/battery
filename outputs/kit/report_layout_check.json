@@ -1,0 +1,25 @@
+{
+  "supporting_results_removed": true,
+  "all_content_within_assignment_sections": true,
+  "word_counts_include_tables_and_captions": true,
+  "excluded_from_counts": [
+    "section headings",
+    "bibliography"
+  ],
+  "counts": {
+    "Measures": 125,
+    "Assumptions": 114,
+    "Model / approach": 212,
+    "Results": 564,
+    "Financial Impacts": 446
+  },
+  "narrative_counts": {
+    "Measures": 125,
+    "Assumptions": 114,
+    "Model / approach": 212,
+    "Results": 312,
+    "Financial Impacts": 301
+  },
+  "existing_observations_fits_financial_estimates_unchanged": true,
+  "repeated_word_xml_identical": true
+}

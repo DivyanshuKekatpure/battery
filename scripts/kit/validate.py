@@ -4,8 +4,10 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from docx import Document
+from docx.text.paragraph import Paragraph
+from docx.table import Table
 from .common import OUT,ROOT,save_json
-from .reports import content
+from .reports import content,words
 
 
 def main():
@@ -30,10 +32,28 @@ def main():
     np.testing.assert_allclose(joined.weibull_scale_EFC*np.log(2)**(1/parameters['weibull_shape']['estimate']),joined.median_EFC,rtol=1e-12)
     parameter_rows=distributions[distributions.temp==25]
 
+    reported_counts=json.loads((OUT/'report_word_counts.json').read_text())
     report_checks=[]
     for name,sections,nimages in [('Preliminary_Methods_and_Results',p,3),('Financial_Impacts',fbody,2)]:
         path=OUT/'report_drafts'/(name+'.docx');doc=Document(path)
         text='\n'.join(x.text for x in doc.paragraphs)
+        headings=[x.text for x in doc.paragraphs if x.style.name=='Heading 1']
+        assert headings==[heading for heading,_ in sections]+['References'],headings
+        assert 'Supporting results' not in text
+        # Count the rendered section, including all table text and captions.
+        rendered_counts={};current=None
+        for block in doc.iter_inner_content():
+            if isinstance(block,Paragraph):
+                if block.style.name=='Heading 1':
+                    current=block.text if block.text!='References' else None
+                    if current:rendered_counts[current]=0
+                elif current:rendered_counts[current]+=words(block.text)
+            elif isinstance(block,Table) and current:
+                rendered_counts[current]+=sum(words(cell.text) for row in block.rows for cell in row.cells)
+        for heading,count in rendered_counts.items():assert reported_counts[heading]==count,(heading,count,reported_counts)
+        assert 300<=rendered_counts.get('Financial Impacts',400)<=500
+        if 'Results' in rendered_counts:assert 300<=rendered_counts['Results']<=600
+
         for _,body in sections:
             for para in body.split('\n\n'):assert para in text,(name,'narrative differs')
         assert len(doc.inline_shapes)==nimages
@@ -51,7 +71,7 @@ def main():
         assert not any(token in text for token in ['5,237','820.2','multistage','[insert','TODO','$4.55'])
         assert 'References' in text and 'https://doi.org/10.35097/1969' in text
         xml=zipfile.ZipFile(path).read('word/document.xml')
-        report_checks.append({'report':name,'tables':len(doc.tables),'figures':len(doc.inline_shapes),'document_xml_sha256':hashlib.sha256(xml).hexdigest(),'shared_narrative_verified':True})
+        report_checks.append({'report':name,'tables':len(doc.tables),'figures':len(doc.inline_shapes),'document_xml_sha256':hashlib.sha256(xml).hexdigest(),'shared_narrative_verified':True,'rendered_section_word_counts':rendered_counts,'assignment_headings_only':True})
     save_json('acceptance_checks.json',{'primary_design_valid':True,'source_columns_present':True,'bootstrap_count':len(b),
              'bootstrap_success':int(b.success.sum()),'financial_identity_valid':True,'distribution_parameters_reconstruct_published_medians':True,'word_limits':json.loads((OUT/'report_word_counts.json').read_text()),'reports':report_checks})
     print('Acceptance checks passed',flush=True)

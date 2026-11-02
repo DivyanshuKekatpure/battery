@@ -35,7 +35,7 @@ Useful outputs include:
 - `cross_validation.csv`, `sensitivity_predictions.csv`: robustness and predictive checks.
 - `financial_strategies.csv`, `financial_sensitivity.csv`, `annual_cost.csv`: conditional money calculations.
 - `outputs/kit/sources/`: cited source register and explicitly classified monetary assumptions.
-- `report_values.json`, `report_word_counts.json`, `acceptance_checks.json`: report provenance and checks.
+- `report_values.json`, `report_word_counts.json`, `acceptance_checks.json`: report provenance and checks. Section counts include prose, tables, and captions; headings and bibliography are excluded. `report_narrative_word_counts.json` separately verifies prose minima. Tables and figures are integrated under the assignment sections.
 - `outputs/kit_audit/`: full archive and 228-cell audit.
 
 Raw downloads remain untracked. The supplied data are Luh & Blank (2024), KIT version 2 result data, DOI [10.35097/1969](https://doi.org/10.35097/1969), under CC BY 4.0. Cite the accompanying [Scientific Data paper](https://doi.org/10.1038/s41597-024-03831-x) and distinguish this project's derived analysis.

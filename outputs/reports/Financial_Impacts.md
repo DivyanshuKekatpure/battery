@@ -2,25 +2,17 @@
 
 ## Financial Impacts
 
-A 90% cap at unchanged 5/3C charging is the prespecified intervention, compared with 100% charging at 25°C. Using KIT lifetime estimates, a conditional three-year phone scenario projects replacement spending of $99.62 before versus $4.49 after, saving $95.13 per owner (nominal 95% cell-bootstrap interval $12.97–$139.16). These are model estimates, not observed smartphone savings (Luh & Blank, 2024).
+At 25°C, capping 5/3C charging at approximately 90%, instead of 100%, is the prespecified intervention. The conditional three-year phone scenario estimates replacement spending of $99.62 before versus $4.49 after: saving $95.13 per owner (nominal 95% cell-bootstrap interval $12.97–$139.16). These remain explicitly conditional projections from KIT cells, not observed phone savings (Luh & Blank, 2024).
 
-The monetary input is a dated $99 iPhone 16 repair fee reported in September 2024, not a verified current quotation (Burkhardt, 2024). Apple's accessible service page did not load numeric pricing when checked on November 1, 2026. Taxes, shipping, and additional service charges are excluded by assumption (Apple, n.d.). We adopt Apple's three-year first-owner power-use horizon and the weak review-site estimate of 0.7 nominal EFC/day: 766.5 EFC per strategy (Apple, 2024; Aussems, 2025). Equal throughput prevents the cap from appearing beneficial simply because each partial cycle delivers less charge.
+The $99 fee is a dated September 2024 iPhone 16 estimate; $119 is a dated Pro-model sensitivity (Burkhardt, 2024). Apple's accessible page failed to load current numeric pricing. Additional fees, tax, shipping, and implementation costs are assumed zero (Apple, n.d.). We adopt Apple's three-year horizon and the weak review-site estimate of 0.7 nominal EFC/day: 766.5 EFC for every strategy (Apple, 2024; Aussems, 2025). Equal throughput avoids crediting the cap merely for delivering less charge per session.
 
-A renewal calculation replaces each battery at 80% initial capacity with a fresh lifetime from the same fitted strategy. Expected replacements decline from 1.006 to 0.045; the probability of at least one replacement declines from 99.8% to 4.5%. Existing chargers and a free policy change are assumed. The estimated break-even implementation cost is therefore $95.13 per owner under this scenario. Charging inconvenience and time are not monetized.
+A renewal calculation assumes independent fresh replacement lives at 80% initial capacity. Its distribution S(t)=exp[-(t/eta)^k] uses common shape k=7.018 (95% CI 6.324–12.936), zero location, and the strategy-specific scales tabulated below. Existing chargers, lifetime-transfer multiplier 1, no discounting, and no separate calendar-aging model are assumptions. Expected replacements fall from 1.006 to 0.045; probability of any replacement falls from 99.8% to 4.5%. Break-even implementation spending is $95.13 per owner; inconvenience is unpriced.
 
-Uncertainty comes from 2,000 whole-cell bootstrap refits, propagated through replacement calculations. Numerical renewal expectations agree with separately labeled simulation checks; halving the EFC grid changes expected spending by less than $0.02. Price, usage, and transfer sensitivities are scenarios rather than confidence intervals. The alternative lognormal model projects $80.24 saving; the $119 Pro-model repair fee is a dated alternative price, not uncertainty about today's base-model fee.
+Intervals propagate 2,000 whole-cell bootstrap refits. A 0.25-EFC renewal grid agrees with separately labeled simulation; halving its step changes spending by less than $0.02. Assumed usage 0.5–1.0 EFC/day and lifetime multipliers 0.5/1/2 are sensitivities, not confidence bounds. Lognormal sensitivity uses sigma=0.181004 and the listed medians, giving $80.24 saving; no secondary bootstrap was performed.
 
-The 766.5-EFC horizon exceeds the baseline group's last valid measured follow-up, requiring extrapolation. Weibull predicts held-out observations worse than lognormal. Further, KIT uses cylindrical cells and liquid cooling; phone transfer, everyday usage, and repeated-replacement behavior remain unvalidated. No separate calendar-aging model is fitted. The results justify funding smartphone-cell validation and a charging-policy pilot, not booking fleet savings or promising a guaranteed benefit. A positive lower interval endpoint reflects the fitted model, not protection against these structural assumptions.
+The horizon exceeds baseline measured follow-up and requires extrapolation. Weibull predicts held-out observations worse than lognormal. Phone transfer and everyday replacement behavior remain unvalidated. Positive conditional intervals do not cover these structural uncertainties. The evidence supports funding validation and a pilot, not booking fleet savings or guaranteeing benefits.
 
-## Supporting results
-
-Distribution inputs: S(t)=exp[-(t/eta)^k], location fixed at zero; k=7.018 (nominal 95% CI 6.324–12.936). Table 2 lists each eta in EFC. The lognormal sensitivity has sigma=0.181004 and each listed median, with log L normally distributed. These are fitted parameters, not additional cell measurements.
-
-Scenario settings: 25°C; 0.80 initial-capacity replacement threshold; horizon 766.5 nominal EFC; lifetime-transfer multiplier 1 (assumed, unvalidated); independent fresh replacement lives; renewal grid 0.25 EFC, checked at half that step. Zero location is fixed, not fitted. Uncertainty uses the same 2,000 joint cell-bootstrap fits, not independent draws from marginal parameter intervals.
-
-Sensitivity settings: assumed use 0.5/0.7/1.0 EFC/day; assumed lifetime multipliers 0.5/1/2; dated repair scenarios $99/$119. These values define scenarios, not observed phone usage distributions or confidence bounds. No discounting is applied. Common-shape assumptions and the weaker Weibull held-out performance remain limitations.
-
-Table 1. Financial inputs. All money is illustrative USD, using a dated repair estimate.
+Table 1. Sourced/assumed financial inputs.
 
 | Input | Value | Evidence status |
 | --- | --- | --- |
@@ -31,31 +23,31 @@ Table 1. Financial inputs. All money is illustrative USD, using a dated repair e
 | incremental_implementation_cost | 0.0 USD | assumed |
 | additional_service_fee | 0.0 USD | assumed |
 
-Table 2. Lifetime-distribution inputs to the 25°C financial scenarios. All rows share Weibull shape k; scales and lognormal medians are estimates. Lognormal sensitivity values are point estimates only.
+Table 2. Estimated 25°C distribution inputs; lognormal values are point estimates.
 
-| Strategy | Weibull scale (EFC) | Scale 95% CI | Lognormal median (EFC) |
+| Strategy | Weibull eta/EFC | 95% CI | Lognormal median/EFC |
 | --- | --- | --- | --- |
-| 1/3C 100% | 2,015.104 | [1,861.721, 2,159.845] | 2,003.253 |
-| 1/3C 90% | 3,200.044 | [2,866.048, 3,764.317] | 3,204.238 |
-| 1C 100% | 1,310.708 | [1,229.095, 1,411.857] | 1,233.257 |
-| 1C 90% | 2,345.022 | [2,057.733, 2,819.225] | 2,206.623 |
-| 5/3C 100% | 593.674 | [388.482, 819.616] | 472.546 |
-| 5/3C 90% | 1,187.051 | [581.257, 1,372.309] | 875.764 |
+| 1/3C 100% | 2,015.104 | 1,861.721–2,159.845 | 2,003.253 |
+| 1/3C 90% | 3,200.044 | 2,866.048–3,764.317 | 3,204.238 |
+| 1C 100% | 1,310.708 | 1,229.095–1,411.857 | 1,233.257 |
+| 1C 90% | 2,345.022 | 2,057.733–2,819.225 | 2,206.623 |
+| 5/3C 100% | 593.674 | 388.482–819.616 | 472.546 |
+| 5/3C 90% | 1,187.051 | 581.257–1,372.309 | 875.764 |
 
-Table 3. Conditional three-year replacement spending and savings versus 5/3C/100% at 25°C. Intervals are nominal 95% cell-bootstrap intervals conditional on Weibull/phone-transfer assumptions.
+Table 3. Conditional spending/saving versus 5/3C/100%; 95% intervals.
 
-| Strategy | Expected replacements | Spending USD | Saving USD [95% CI] |
+| Strategy | Replacements | Spending/USD | Saving/USD (95% CI) |
 | --- | --- | --- | --- |
-| 1/3C 100% | 0.001 | $0.11 | $99.51 [$38.36, $164.16] |
-| 1/3C 90% | 0.000 | $0.00 | $99.62 [$38.37, $164.22] |
-| 1C 100% | 0.023 | $2.27 | $97.35 [$38.12, $162.78] |
-| 1C 90% | 0.000 | $0.04 | $99.58 [$38.37, $164.20] |
-| 5/3C 100% | 1.006 | $99.62 | $0.00 [$0.00, $0.00] |
-| 5/3C 90% | 0.045 | $4.49 | $95.13 [$12.97, $139.16] |
+| 1/3C 100% | 0.001 | $0.11 | $99.51 ($38.36–$164.16) |
+| 1/3C 90% | 0.000 | $0.00 | $99.62 ($38.37–$164.22) |
+| 1C 100% | 0.023 | $2.27 | $97.35 ($38.12–$162.78) |
+| 1C 90% | 0.000 | $0.04 | $99.58 ($38.37–$164.20) |
+| 5/3C 100% | 1.006 | $99.62 | $0.00 ($0.00–$0.00) |
+| 5/3C 90% | 0.045 | $4.49 | $95.13 ($12.97–$139.16) |
 
-![Figure 1. Conditional replacement spending. Excludes initial phone and charger purchases; interval uncertainty does not cover transfer to smartphones.](../kit/figures/conditional_costs.png)
+![Figure 1. Conditional replacement spending; 95% intervals.](../kit/figures/conditional_costs.png)
 
-![Figure 2. Conditional annual cumulative replacement spending for the prespecified cap intervention.](../kit/figures/conditional_annual_spend.png)
+![Figure 2. Conditional cumulative replacement spending.](../kit/figures/conditional_annual_spend.png)
 
 ## References
 
