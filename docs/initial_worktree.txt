@@ -1,0 +1,8 @@
+ M .gitignore
+ D docs/decision_log.md
+?? docs/old_decision_log.md
+?? outputs/isu_audit/
+?? outputs/kit_audit/
+?? outputs/reports/task.txt
+?? scripts/audit_isu.py
+?? scripts/audit_kit.py
