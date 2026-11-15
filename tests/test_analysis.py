@@ -19,12 +19,15 @@ def fake_cell(cell, cycles, retention, temp=25, rate=3, cap=100, stop="EOL_cap")
 
 
 class CellLife(unittest.TestCase):
-    def test_life_is_midpoint_of_crossing_window(self):
+    def test_life_is_straight_line_crossing(self):
         study, used = fake_cell("A", [0, 100, 200, 300], [1.0, 0.9, 0.82, 0.78])
         row = a.cell_lives(study, used).iloc[0]
         self.assertTrue(row.reached_80)
         self.assertEqual((row.last_check_before, row.first_check_below), (200, 300))
-        self.assertEqual(row.life_cycles, 250)
+        self.assertAlmostEqual(row.life_cycles, 250)
+        # Uneven drop: 0.81 -> 0.71 over 100 cycles crosses 80% one tenth of the way in.
+        study, used = fake_cell("A2", [0, 100, 200], [1.0, 0.81, 0.71])
+        self.assertAlmostEqual(a.cell_lives(study, used).life_cycles.iloc[0], 110)
 
     def test_cell_that_never_crosses_is_a_lower_bound(self):
         study, used = fake_cell("B", [0, 100, 200], [1.0, 0.95, 0.9])
@@ -34,8 +37,8 @@ class CellLife(unittest.TestCase):
 
     def test_threshold_parameter(self):
         study, used = fake_cell("C", [0, 100, 200, 300], [1.0, 0.85, 0.75, 0.65])
-        self.assertEqual(a.cell_lives(study, used, 0.8).life_cycles.iloc[0], 150)
-        self.assertEqual(a.cell_lives(study, used, 0.7).life_cycles.iloc[0], 250)
+        self.assertAlmostEqual(a.cell_lives(study, used, 0.8).life_cycles.iloc[0], 150)
+        self.assertAlmostEqual(a.cell_lives(study, used, 0.7).life_cycles.iloc[0], 250)
 
     def test_error_stop_is_flagged(self):
         study, used = fake_cell("D", [0, 100], [1.0, 0.7], stop="dSoc+ err")

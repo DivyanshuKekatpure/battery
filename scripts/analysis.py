@@ -145,7 +145,11 @@ def prepare():
 
 
 def cell_lives(study, used, threshold=END_OF_LIFE):
-    """Cycles until each cell first measured below the threshold (default 80%) of its starting capacity."""
+    """Cycles until each cell's capacity fell below the threshold (default 80%) of its starting capacity.
+
+    Check-ups are periodic, so the crossing happens somewhere between the last check above
+    the threshold and the first check below it. We estimate it by drawing a straight line
+    between those two measurements."""
     out = []
     for cell, g in used.groupby("cell"):
         g = g.sort_values("cycles")
@@ -153,7 +157,8 @@ def cell_lives(study, used, threshold=END_OF_LIFE):
         if len(below):
             i = below[0]
             lo, hi = g.cycles.iloc[i - 1], g.cycles.iloc[i]
-            life, reached = (lo + hi) / 2, True
+            r_lo, r_hi = g.retention.iloc[i - 1], g.retention.iloc[i]
+            life, reached = lo + (r_lo - threshold) / (r_lo - r_hi) * (hi - lo), True
         else:
             lo, hi, life, reached = g.cycles.iloc[-1], np.nan, g.cycles.iloc[-1], False
         out.append(dict(cell=cell, last_check_before=lo, first_check_below=hi, life_cycles=life,
@@ -287,6 +292,18 @@ def figures(used, lives, summary, effects, cost):
     fig.suptitle("Main effects: median battery life of all cells at each level")
     fig.tight_layout(); fig.savefig(FIGURES / "main_effects.png", dpi=150); plt.close(fig)
 
+    # Interaction: does the charge-rate effect depend on temperature?
+    fig, axes = plt.subplots(1, 2, figsize=(9, 3.3), sharey=True)
+    tcol = {0: "#2c7bb6", 10: "#abd9e9", 25: "#fdae61", 40: "#d7191c"}
+    for ax, c in zip(axes, (100, 90)):
+        for t in sorted(summary.temp.unique()):
+            g = summary[(summary.temp == t) & (summary.cap == c)].sort_values("rate")
+            ax.plot(range(len(g)), g.median_life, "-o", color=tcol[t], label=f"{t}°C")
+        ax.set_xticks([0, 1, 2], ["1/3C", "1C", "5/3C"]); ax.set_xlabel("Charge rate"); ax.set_title(CAP_LABEL[c])
+    axes[0].set_ylabel("Median cycles until 80%"); axes[0].legend(frameon=False, title="Temperature", loc="upper right")
+    fig.suptitle("Interaction: the effect of charge rate depends on temperature")
+    fig.tight_layout(); fig.savefig(FIGURES / "interaction_rate_temp.png", dpi=150); plt.close(fig)
+
     # Yearly battery cost at 25 C, 1 cycle/day
     c1 = cost[cost.usage_per_day == 1.0]
     fig, ax = plt.subplots(figsize=(6, 3.2))
@@ -353,6 +370,10 @@ def main():
         checkups_dropped_final=int((checks.dropped == "final check-up after temperature-control failure").sum()),
         cells_reached_80=int(lives.reached_80.sum()), cells_not_reached_80=int((~lives.reached_80).sum()),
         cells_stopped_by_error=int(lives.stopped_by_error.sum()),
+        error_stops_uncapped=int((lives.stopped_by_error & (lives.cap == 100)).sum()),
+        error_stops_fast=int((lives.stopped_by_error & (lives.rate > 1)).sum()),
+        error_stops_before_80=int((lives.stopped_by_error & ~lives.reached_80).sum()),
+        error_stops_before_80_uncapped=int((lives.stopped_by_error & ~lives.reached_80 & (lives.cap == 100)).sum()),
         cap_longer_pairs=int(compare.confirmed.sum()), cap_undecided_pairs=int(compare.undecided.sum()),
         cap_shorter_pairs=int((compare.times_longer < 1).sum()), pairs=len(compare),
         cap_clear_pairs=int(compare.clear.sum()),
