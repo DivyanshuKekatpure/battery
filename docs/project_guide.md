@@ -22,7 +22,9 @@ This guide explains the ideas behind the project and walks through it as a Six S
 2. **Lithium plating.** When a cell is charged fast, lithium ions arrive at the negative electrode faster than they can move inside it. Some of them deposit as metallic lithium on the surface instead, and much of that lithium is lost for good. Cold makes the electrode slower to absorb lithium, so **fast charging in the cold** is the worst case. In our data, cells at 0°C charged at 5/3C wear out within tens of cycles.
 3. **Heat-driven aging.** Heat speeds up all chemical reactions, including the slow ones that age a battery. That is why slow-charged cells last *less* at 40°C than at 25°C. But heat also makes lithium plating less likely, so for *fast* charging, 40°C beats 25°C. The two effects pull in opposite directions, and our results show both.
 
-A fourth effect, **calendar aging** (aging with time even when unused), is not part of this analysis. That is why very long battery lives, beyond about five years, should be read with care.
+A fourth effect is **calendar aging**: batteries lose capacity with time even when unused. KIT stored 48 cells without cycling them, at 10%, 50%, 90% and 100% charge and the same four temperatures (`outputs/tables/storage_aging.csv`, `outputs/figures/storage_aging.png`). At 25°C, cells stored at 90–100% charge lost 8.5–9.6% of their capacity in one year (median of 3 cells), against about 6% for cells kept at 10%. Heat makes high-charge storage much worse: at 40°C, cells stored at 90–100% lost 14–16% in a year.
+
+Two lessons follow. First, the lab cycled cells about 8 times a day, so they reached 80% within months and saw little calendar aging. A phone doing one cycle a day takes years, and loses capacity to time as well, so the "years" in the cost table are upper limits. Second, storing at a low charge helps, but the data do **not** show a clear storage benefit from 90% versus 100%: at 25°C the two are close for most cells (one 100% cell aged unusually fast), and at 40°C the 90% cells did slightly worse. The cap's proven benefit is during cycling.
 
 ## The project as DMAIC
 
