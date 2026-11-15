@@ -180,7 +180,7 @@ def cap_comparison(summary):
     s = summary.set_index(["temp", "rate", "cap"])
     out = []
     for t in sorted(summary.temp.unique()):
-        for r in (1, 3, 5):
+        for r in sorted(summary[summary.temp == t].rate.unique()):
             a, b = s.loc[(t, r, 90)], s.loc[(t, r, 100)]
             out.append(dict(temp=t, rate=r, life_90=a.median_life, life_90_at_least=a.at_least,
                             life_100=b.median_life, life_100_at_least=b.at_least,
@@ -292,9 +292,10 @@ def figures(used, lives, summary, effects, cost):
     fig, ax = plt.subplots(figsize=(6, 3.2))
     for k, r in enumerate((1, 3, 5)):
         for c, dx in ((100, -.18), (90, .18)):
-            v = c1[(c1.rate == r) & (c1.cap == c)].cost_per_year.iloc[0]
+            row = c1[(c1.rate == r) & (c1.cap == c)].iloc[0]
+            v = row.cost_per_year
             ax.bar(k + dx, v, width=.34, color=col[c], label=CAP_LABEL[c] if k == 0 else None)
-            ax.text(k + dx, v, f"${v:.0f}", ha="center", va="bottom", fontsize=8)
+            ax.text(k + dx, v, ("≤" if row.at_least else "") + f"${v:.0f}", ha="center", va="bottom", fontsize=8)
     ax.set_xticks([0, 1, 2], ["1/3C (slow)", "1C (medium)", "5/3C (fast)"])
     ax.set_ylabel("Battery wear cost per year (USD)"); ax.legend(frameon=False)
     ax.set_title(f"25°C, one full charge per day, ${PRICE_USD:.0f} replacement")
