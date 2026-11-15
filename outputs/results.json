@@ -1,0 +1,21 @@
+{
+  "cells": 72,
+  "conditions": 24,
+  "checkups_used": 859,
+  "checkups_dropped_cold": 3,
+  "checkups_dropped_final": 11,
+  "cells_reached_80": 63,
+  "cells_not_reached_80": 9,
+  "cells_stopped_by_error": 24,
+  "cap_longer_pairs": 12,
+  "pairs": 12,
+  "cap_clear_pairs": 10,
+  "cap_times_longer_median": 2.254578083238594,
+  "initial_capacity_median_Ah": 2.9239040000000003,
+  "price_usd": 99.0,
+  "usage_per_day": [
+    0.5,
+    1.0,
+    1.5
+  ]
+}

@@ -1,9 +1,9 @@
+# KIT dataset (download separately, see README)
+data2/
+# Local files kept outside the project (not used by the analysis)
 data/
-outputs/*.mat
-.venv/
-.DS_Store
-outputs/*.h5
-outputs/*.tmp
-__pycache__/
 papers/
-outputs/sim_results_sensitivity.csv
+# Python / OS
+.venv/
+__pycache__/
+.DS_Store

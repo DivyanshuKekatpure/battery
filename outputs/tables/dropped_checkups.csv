@@ -1,0 +1,15 @@
+cell,time_s,capacity_Ah,cycles,temp_end,dropped
+P026_1,1686142426.0,1.578915,915.0949999999999,2.16,check-up not at room temperature
+P026_2,1686142421.0,1.570411,893.055,3.05,check-up not at room temperature
+P026_3,1686141002.0,1.439081,839.6850000000001,1.79,check-up not at room temperature
+P046_1,1716999438.0,1.455766,2917.586666666666,25.61,final check-up after temperature-control failure
+P046_2,1716999706.0,1.388439,2902.8783333333326,25.13,final check-up after temperature-control failure
+P046_3,1716999620.0,1.441301,2910.433333333333,24.9,final check-up after temperature-control failure
+P050_1,1717006219.0,2.364677,2964.648333333333,24.12,final check-up after temperature-control failure
+P050_2,1717005403.0,2.356502,2960.61,23.77,final check-up after temperature-control failure
+P050_3,1717004699.0,2.349743,2963.726666666667,24.5,final check-up after temperature-control failure
+P062_1,1717005230.0,2.227273,2994.3816666666667,23.97,final check-up after temperature-control failure
+P062_2,1717005319.0,2.244658,2991.2066666666665,23.66,final check-up after temperature-control failure
+P062_3,1717003934.0,2.244481,2992.0049999999997,24.11,final check-up after temperature-control failure
+P063_2,1717003410.0,1.6645,4786.858333333334,24.42,final check-up after temperature-control failure
+P063_3,1717003161.0,1.988428,4908.845,24.39,final check-up after temperature-control failure

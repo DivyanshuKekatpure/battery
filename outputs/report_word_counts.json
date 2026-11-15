@@ -1,0 +1,22 @@
+{
+  "Measures": {
+    "prose": 123,
+    "with_tables_and_captions": 123
+  },
+  "Assumptions": {
+    "prose": 106,
+    "with_tables_and_captions": 106
+  },
+  "Model / approach": {
+    "prose": 138,
+    "with_tables_and_captions": 138
+  },
+  "Results": {
+    "prose": 326,
+    "with_tables_and_captions": 460
+  },
+  "Financial Impacts": {
+    "prose": 321,
+    "with_tables_and_captions": 371
+  }
+}
