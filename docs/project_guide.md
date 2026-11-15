@@ -34,11 +34,12 @@ A fourth effect, **calendar aging** (aging with time even when unused), is not p
 ### Measure
 - **Data:** the KIT battery aging dataset, version 2 (Luh & Blank, 2024). It is a designed experiment with 3 charge rates × 2 charge limits × 4 temperatures, 3 cells each, so 72 cells, with discharge fixed at 1C.
 - **What was measured:** a standard capacity check-up every few weeks (a full slow discharge at room temperature), plus how much charge passed through each cell.
-- **Data checks:** the download is verified against its own checksums. Check-ups not done at room temperature, and the last check-up done after the lab's temperature control failed, are left out (`outputs/tables/dropped_checkups.csv`). Cells stopped by equipment errors are kept up to the point they stopped, and are marked × in plots.
+- **Data checks:** the download is verified against its own checksums. Check-ups not done at room temperature, and the last check-up done after the lab's temperature control failed, are left out (`outputs/tables/dropped_checkups.csv`). Cells stopped by equipment errors are kept up to the point they stopped, and are marked × in plots. These errors were mostly in uncapped, faster-charged cells; the few that stopped before reaching 80% are counted only as "at least" lives, never as failures.
 
 ### Analyze
 - **Capacity fade curves** for every cell (`outputs/figures/fade_all_conditions.png`).
-- **Battery life per cell**: the midpoint between the last check above 80% and the first check below it (`outputs/tables/cell_life.csv`).
+- **Battery life per cell**: when capacity crossed 80%, estimated with a straight line between the last check above 80% and the first check below it (`outputs/tables/cell_life.csv`).
+- **Interaction plot**: whether the effect of charge rate depends on temperature (`outputs/figures/interaction_rate_temp.png`). At 40°C, charge rate barely matters; in the cold, it matters a lot.
 - **Median of the 3 cells** per condition, and a direct cap-versus-no-cap comparison (`outputs/tables/cap_vs_no_cap.csv`, `outputs/figures/life_cap_vs_no_cap.png`).
 - **Main effects chart**: the overall influence of charge rate, charge limit and temperature (`outputs/figures/main_effects.png`).
 - **Fishbone diagram** of possible causes, including the ones held fixed or not tested (`outputs/figures/fishbone.png`).

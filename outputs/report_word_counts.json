@@ -1,7 +1,7 @@
 {
   "Measures": {
-    "prose": 152,
-    "with_tables_and_captions": 152
+    "prose": 155,
+    "with_tables_and_captions": 155
   },
   "Assumptions": {
     "prose": 106,
@@ -12,8 +12,8 @@
     "with_tables_and_captions": 229
   },
   "Results": {
-    "prose": 392,
-    "with_tables_and_captions": 561
+    "prose": 401,
+    "with_tables_and_captions": 581
   },
   "Financial Impacts": {
     "prose": 381,
