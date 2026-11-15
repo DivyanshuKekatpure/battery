@@ -77,7 +77,8 @@ def load_conditions():
                 temp=int(float(c["age_temp"])),
                 charge_C=float(c["I_chg_max_cyc_A"]) / NOMINAL_AH,
                 discharge_C=abs(float(c["I_dischg_max_cyc_A"])) / NOMINAL_AH,
-                v_min=float(c["V_min_cyc_V"]), v_max=float(c["V_max_cyc_V"])))
+                v_min=float(c["V_min_cyc_V"]), v_max=float(c["V_max_cyc_V"]),
+                storage_charge=float(c["age_soc"])))       # % charge level, used by storage-only cells
     return pd.DataFrame(out)
 
 
@@ -159,9 +160,11 @@ def cell_lives(study, used, threshold=END_OF_LIFE):
             lo, hi = g.cycles.iloc[i - 1], g.cycles.iloc[i]
             r_lo, r_hi = g.retention.iloc[i - 1], g.retention.iloc[i]
             life, reached = lo + (r_lo - threshold) / (r_lo - r_hi) * (hi - lo), True
+            days = (np.interp(life, g.cycles, g.time_s) - g.time_s.iloc[0]) / 86400 if "time_s" in g else np.nan
         else:
             lo, hi, life, reached = g.cycles.iloc[-1], np.nan, g.cycles.iloc[-1], False
-        out.append(dict(cell=cell, last_check_before=lo, first_check_below=hi, life_cycles=life,
+            days = (g.time_s.iloc[-1] - g.time_s.iloc[0]) / 86400 if "time_s" in g else np.nan
+        out.append(dict(cell=cell, last_check_before=lo, first_check_below=hi, life_cycles=life, lab_days=days,
                         reached_80=reached, checkups=len(g), final_retention=g.retention.iloc[-1]))
     lives = study[["cell", "temp", "rate", "cap", "stop_reason"]].merge(pd.DataFrame(out), on="cell")
     lives["stopped_by_error"] = lives.stop_reason.str.contains("err", case=False)
@@ -196,6 +199,36 @@ def cap_comparison(summary):
                             confirmed=(not b.at_least) and a.median_life > b.median_life,
                             undecided=bool(b.at_least) and not (a.median_life < b.median_life and not a.at_least)))
     return pd.DataFrame(out)
+
+
+STORAGE_DAYS = [90, 180, 365, 540]
+
+
+def storage_aging():
+    """Capacity lost by KIT's storage-only cells (no cycling, only periodic check-ups).
+
+    48 cells were held at 10/50/90/100% charge x 0/10/25/40 C, three cells each. This
+    shows how much capacity a battery loses from time alone. Measured up to about 18 months.
+    """
+    cond = load_conditions()
+    store = cond[cond.test_type == "calendar"][["cell", "temp", "storage_charge"]]
+    assert len(store) == 48 and store.groupby(["temp", "storage_charge"]).size().eq(3).all()
+    checks = load_capacity_checks()
+    checks = checks[checks.cell.isin(store.cell) & checks.temp_end.between(20, 30)
+                    & (checks.time_s < MANUAL_CHECKUP_START)].sort_values(["cell", "time_s"])
+    first = checks.groupby("cell").first()
+    checks["days"] = (checks.time_s - checks.cell.map(first.time_s)) / 86400
+    checks["retention"] = checks.capacity_Ah / checks.cell.map(first.capacity_Ah)
+    checks = checks.merge(store, on="cell")
+    out = []
+    for (t, q, cell), g in checks.groupby(["temp", "storage_charge", "cell"]):
+        for d in STORAGE_DAYS:
+            if g.days.max() >= d:      # no extrapolation past the last check-up
+                out.append(dict(temp=t, storage_charge=q, cell=cell, days=d,
+                                capacity_lost_pct=100 * (1 - np.interp(d, g.days, g.retention))))
+    loss = (pd.DataFrame(out).groupby(["temp", "storage_charge", "days"])
+            .agg(capacity_lost_pct=("capacity_lost_pct", "median"), cells=("cell", "size")).reset_index())
+    return checks, loss
 
 
 def main_effects(lives):
@@ -340,6 +373,22 @@ def figures(used, lives, summary, effects, cost):
     fig.tight_layout(); fig.savefig(FIGURES / "fishbone.png", dpi=150); plt.close(fig)
 
 
+def storage_figure(checks):
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    col = {10: "#2c7bb6", 50: "#7fbf7b", 90: "#fdae61", 100: "#d7191c"}
+    fig, axes = plt.subplots(1, 4, figsize=(11, 3.2), sharey=True)
+    for ax, t in zip(axes, sorted(checks.temp.unique())):
+        for (q, cell), g in checks[checks.temp == t].groupby(["storage_charge", "cell"]):
+            ax.plot(g.days, g.retention * 100, "-", lw=1, color=col[int(q)],
+                    label=f"stored at {int(q)}%" if cell.endswith("_1") else None)
+        ax.set_title(f"{t}°C"); ax.set_xlabel("Days in storage")
+    axes[0].set_ylabel("Capacity left (%)"); axes[0].legend(frameon=False, fontsize=8)
+    fig.suptitle("Storage only (no cycling): capacity lost to time alone, by charge level")
+    fig.tight_layout(); fig.savefig(FIGURES / "storage_aging.png", dpi=150); plt.close(fig)
+
+
 # ---------------------------------------------------------------- 4. run
 def main():
     verify_download()
@@ -353,6 +402,7 @@ def main():
                             .rename(columns=lambda c: c if c in ("temp", "rate") else c + "_70"), on=["temp", "rate"])
     effects = main_effects(lives)
     cost = costs(summary)
+    storage_checks, storage = storage_aging()
 
     TABLES.mkdir(parents=True, exist_ok=True)
     used.to_csv(TABLES / "capacity_checkups.csv", index=False)
@@ -362,7 +412,9 @@ def main():
     compare.to_csv(TABLES / "cap_vs_no_cap.csv", index=False)
     effects.to_csv(TABLES / "main_effects.csv", index=False)
     cost.to_csv(TABLES / "cost_per_year.csv", index=False)
+    storage.to_csv(TABLES / "storage_aging.csv", index=False)
     figures(used, lives, summary, effects, cost)
+    storage_figure(storage_checks)
 
     facts = dict(
         cells=len(study), conditions=int(summary.shape[0]), checkups_used=len(used),
@@ -384,6 +436,10 @@ def main():
         check70_cap_times_longer_median=float(compare.times_longer_70.median()),
         check70_cells_reached=int(cell_lives(study, used, CHECK_THRESHOLD).reached_80.sum()),
         initial_capacity_median_Ah=float(used.groupby("cell").capacity_Ah.first().median()),
+        lab_months_to_80_1C_25C=[round(float(x) / 30.4, 1) for x in
+                                 lives[(lives.temp == 25) & (lives.rate == 3) & lives.reached_80].lab_days.agg(["min", "max"])],
+        storage_loss_25C={f"{int(q)}%": {int(d): round(float(v), 1) for d, v in g.set_index("days").capacity_lost_pct.items()}
+                          for q, g in storage[storage.temp == 25].groupby("storage_charge")},
         price_usd=PRICE_USD, usage_per_day=USAGE_PER_DAY)
     (OUT / "results.json").write_text(json.dumps(facts, indent=2) + "\n")
     print(json.dumps(facts, indent=2))

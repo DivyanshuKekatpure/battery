@@ -44,6 +44,6 @@ This checks the download against its checksums, rebuilds every table, figure and
 | `scripts/analysis.py` | Reads the KIT data, finds each cell's life, builds tables and figures |
 | `scripts/reports.py` | Writes both reports (Markdown and Word) from the tables |
 | `tests/test_analysis.py` | Checks the life, comparison and cost logic on small known examples, and checks the real data (72 cells, 3 per condition, 859 check-ups) |
-| `outputs/tables/` | `cell_life.csv` (every cell), `condition_life.csv` (median of 3 cells), `cap_vs_no_cap.csv`, `main_effects.csv`, `cost_per_year.csv`, `capacity_checkups.csv` (every measurement used), `dropped_checkups.csv` (left out, with reason) |
-| `outputs/figures/` | Capacity fade curves, cap vs no-cap chart, main effects, fishbone diagram, cost chart |
+| `outputs/tables/` | `cell_life.csv` (every cell), `condition_life.csv` (median of 3 cells), `cap_vs_no_cap.csv`, `main_effects.csv`, `cost_per_year.csv`, `storage_aging.csv` (capacity lost by unused cells over time), `capacity_checkups.csv` (every measurement used), `dropped_checkups.csv` (left out, with reason) |
+| `outputs/figures/` | Capacity fade curves, cap vs no-cap chart, main effects, interaction plot, fishbone diagram, cost chart, storage-only aging |
 | `outputs/results.json` | Headline counts used in the reports |

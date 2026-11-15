@@ -101,6 +101,15 @@ class RealData(unittest.TestCase):
         self.assertEqual(len(dropped), 14)
         self.assertEqual(len(self.used), 859)
 
+    def test_storage_cells_and_no_extrapolation(self):
+        checks, loss = a.storage_aging()
+        self.assertEqual(checks.cell.nunique(), 48)
+        last_day = checks.groupby("cell").days.max()
+        self.assertTrue((loss.cells >= 1).all() and (loss.cells <= 3).all())
+        self.assertLessEqual(loss.days.max(), last_day.max())
+        # Every storage cell starts at 100% and only loses capacity overall.
+        self.assertTrue((checks.groupby("cell").retention.last() < 1).all())
+
     def test_published_results_match_the_data(self):
         import json
         facts = json.loads((a.OUT / "results.json").read_text())
