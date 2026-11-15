@@ -29,6 +29,7 @@ TABLES, FIGURES = OUT / "tables", OUT / "figures"
 # ---------------------------------------------------------------- settings
 NOMINAL_AH = 3.0          # nominal cell capacity, stated in KIT "Readme v2"
 END_OF_LIFE = 0.80        # industry convention: battery is "worn out" below 80% of its starting capacity
+CHECK_THRESHOLD = 0.70    # robustness check: does the conclusion change if "worn out" means 70%?
 PRICE_USD = 99.0          # EXTERNAL: phone battery replacement fee (Burkhardt, 2024, 9to5Mac)
 USAGE_PER_DAY = [0.5, 1.0, 1.5]   # SCENARIOS, not data: full charge cycles a phone owner uses per day
 # KIT readme: temperature control failed on 27 May 2024; the last (manual) check-up ran without it.
@@ -143,12 +144,12 @@ def prepare():
     return study, checks, used
 
 
-def cell_lives(study, used):
-    """Cycles until each cell first measured below 80% of its starting capacity."""
+def cell_lives(study, used, threshold=END_OF_LIFE):
+    """Cycles until each cell first measured below the threshold (default 80%) of its starting capacity."""
     out = []
     for cell, g in used.groupby("cell"):
         g = g.sort_values("cycles")
-        below = np.flatnonzero(g.retention.to_numpy() < END_OF_LIFE)
+        below = np.flatnonzero(g.retention.to_numpy() < threshold)
         if len(below):
             i = below[0]
             lo, hi = g.cycles.iloc[i - 1], g.cycles.iloc[i]
@@ -185,7 +186,10 @@ def cap_comparison(summary):
                             life_100=b.median_life, life_100_at_least=b.at_least,
                             extra_cycles=a.median_life - b.median_life,
                             times_longer=a.median_life / b.median_life,
-                            clear=(not b.at_least) and a.lowest > b.highest))
+                            clear=(not b.at_least) and a.lowest > b.highest,
+                            # If the uncapped median is only a lower bound we cannot confirm which lasted longer.
+                            confirmed=(not b.at_least) and a.median_life > b.median_life,
+                            undecided=bool(b.at_least) and not (a.median_life < b.median_life and not a.at_least)))
     return pd.DataFrame(out)
 
 
@@ -325,6 +329,10 @@ def main():
     lives = cell_lives(study, used)
     summary = condition_summary(lives)
     compare = cap_comparison(summary)
+    # Same comparison with 70% as the end-of-life point (robustness check only).
+    compare70 = cap_comparison(condition_summary(cell_lives(study, used, CHECK_THRESHOLD)))
+    compare = compare.merge(compare70[["temp", "rate", "times_longer", "life_90_at_least", "life_100_at_least", "clear", "confirmed", "undecided"]]
+                            .rename(columns=lambda c: c if c in ("temp", "rate") else c + "_70"), on=["temp", "rate"])
     effects = main_effects(lives)
     cost = costs(summary)
 
@@ -344,9 +352,15 @@ def main():
         checkups_dropped_final=int((checks.dropped == "final check-up after temperature-control failure").sum()),
         cells_reached_80=int(lives.reached_80.sum()), cells_not_reached_80=int((~lives.reached_80).sum()),
         cells_stopped_by_error=int(lives.stopped_by_error.sum()),
-        cap_longer_pairs=int((compare.times_longer > 1).sum()), pairs=len(compare),
+        cap_longer_pairs=int(compare.confirmed.sum()), cap_undecided_pairs=int(compare.undecided.sum()),
+        cap_shorter_pairs=int((compare.times_longer < 1).sum()), pairs=len(compare),
         cap_clear_pairs=int(compare.clear.sum()),
         cap_times_longer_median=float(compare.times_longer.median()),
+        check70_cap_longer_pairs=int(compare.confirmed_70.sum()), check70_cap_undecided_pairs=int(compare.undecided_70.sum()),
+        check70_cap_shorter_pairs=int((compare.times_longer_70 < 1).sum()),
+        check70_cap_clear_pairs=int(compare.clear_70.sum()),
+        check70_cap_times_longer_median=float(compare.times_longer_70.median()),
+        check70_cells_reached=int(cell_lives(study, used, CHECK_THRESHOLD).reached_80.sum()),
         initial_capacity_median_Ah=float(used.groupby("cell").capacity_Ah.first().median()),
         price_usd=PRICE_USD, usage_per_day=USAGE_PER_DAY)
     (OUT / "results.json").write_text(json.dumps(facts, indent=2) + "\n")

@@ -35,6 +35,14 @@ def life_txt(row, cap):
     return ("≥" if row[f"life_{cap}_at_least"] else "") + n(v)
 
 
+def gain(row, suffix=""):
+    """Cap gain; ≥/≤ when one side never reached the threshold (its life is only a lower bound)."""
+    a, b = row[f"life_90_at_least{suffix}"], row[f"life_100_at_least{suffix}"]
+    if a and b:
+        return "n/a"
+    return ("≥" if a else "≤" if b else "") + f"{row[f'times_longer{suffix}']:.1f}×"
+
+
 def money(x):
     return f"${x:,.0f}"
 
@@ -68,12 +76,12 @@ assumptions = f"""We assume the 80% threshold is a fair definition of a worn-out
 
 model = f"""We follow the Six Sigma DMAIC steps. **Define:** batteries lose capacity too fast; the quality characteristic is cycles until 80% capacity. **Measure:** we read every capacity check-up for the {f['cells']} KIT cells in a full 3 × 2 × 4 factorial design, three cells per condition, with discharge fixed at 1C. **Analyze:** we plot capacity fade, find each cell's life, take the median of the three cells in each condition, and compare 90% versus 100% at matching rate and temperature. A main-effects chart shows each factor's overall influence, and a fishbone diagram lists other possible causes. **Improve:** we test whether a 90% cap and slower charging extend life. **Control:** we suggest a default charging policy to hold the gain. We use no fitted statistical model; every result is a direct measurement or simple arithmetic on measurements."""
 
-rows = [[f"{t}°C", RATE[r], life_txt(row, 100), life_txt(row, 90), f"{row.times_longer:.1f}×"]
+rows = [[f"{t}°C", RATE[r], life_txt(row, 100), life_txt(row, 90), gain(row), gain(row, "_70")]
         for (t, r), row in comp.set_index(["temp", "rate"]).iterrows()]
 
 results = f"""We used {f['checkups_used']} check-ups from {f['cells']} cells; {f['cells_reached_80']} cells fell below 80% during testing and {f['cells_not_reached_80']} did not.
 
-**Capping at 90% extended life in all {f['pairs']} rate–temperature pairs** (Table 1, Figure 2). In {f['cap_clear_pairs']} pairs every capped cell outlasted every uncapped cell. The typical gain was {f['cap_times_longer_median']:.1f}× more cycles. At 25°C, capping raised median life from {L(25,1,100)} to {L(25,1,90)} cycles at 1/3C, {L(25,3,100)} to {L(25,3,90)} at 1C, and {L(25,5,100)} to {L(25,5,90)} at 5/3C (Figure 1).
+**Capping at 90% extended life in {f['cap_longer_pairs']} of {f['pairs']} rate–temperature pairs, and shortened it in none** (Table 1, Figure 2). The remaining pair (0°C, 5/3C) can't be decided, because two uncapped cells stopped on errors before reaching 80%. In {f['cap_clear_pairs']} pairs every capped cell outlasted every uncapped cell. The typical gain was {f['cap_times_longer_median']:.1f}× more cycles. At 25°C, capping raised median life from {L(25,1,100)} to {L(25,1,90)} cycles at 1/3C, {L(25,3,100)} to {L(25,3,90)} at 1C, and {L(25,5,100)} to {L(25,5,90)} at 5/3C (Figure 1). Using 70% instead of 80% as the end-of-life point gives the same answer: the cap gave more cycles in {f['check70_cap_longer_pairs']} pairs and fewer in {f['check70_cap_shorter_pairs']}, with a typical gain of {f['check70_cap_times_longer_median']:.1f}×. The other {f['check70_cap_undecided_pairs']} pairs can't be decided, because fewer cells reached 70% before testing ended ({f['check70_cells_reached']} of {f['cells']}).
 
 **Why the cap helps.** Holding a cell near 4.2 V, completely full, stresses the electrodes and speeds up side reactions that consume lithium. Stopping at 4.09 V avoids the most stressful part of every cycle. Figure 1 also shows a "knee": capacity first fades slowly, then drops quickly. Capped cells reach that knee much later.
 
@@ -85,8 +93,8 @@ results = f"""We used {f['checkups_used']} check-ups from {f['cells']} cells; {f
 
 prelim = [("Measures", measures, []), ("Assumptions", assumptions, []), ("Model / approach", model, []),
           ("Results", results,
-           [("table", "Table 1. Median cycles until 80% capacity (3 cells each); ≥ means at least.",
-             ["Temp", "Charge rate", "100% (no cap)", "90% cap", "Cap gain"], rows),
+           [("table", "Table 1. Median cycles until 80% capacity (3 cells each); ≥ means at least; ≤ means at most; n/a means both are lower bounds. Last column repeats the gain using 70% as end of life.",
+             ["Temp", "Charge rate", "100% (no cap)", "90% cap", "Cap gain", "Gain at 70%"], rows),
             ("figure", "Figure 1. Measured capacity at 25°C. × marks a test stopped by an equipment error.", "fade_25C.png"),
             ("figure", "Figure 2. Cycles until 80% capacity, cap versus no cap, for every condition.", "life_cap_vs_no_cap.png"),
             ("figure", "Figure 3. Main effects: median life of all cells at each factor level.", "main_effects.png")])]
@@ -94,15 +102,18 @@ prelim = [("Measures", measures, []), ("Assumptions", assumptions, []), ("Model 
 # ------------------------------------------------------------------ Financial report
 usage = f["usage_per_day"]
 fin_rows = [[RATE[r], money(C(1.0, r, 100)), money(C(1.0, r, 90)), money(C(1.0, r, 90, 'saving_per_year_vs_no_cap'))] for r in (1, 3, 5)]
-lo, hi = C(min(usage), 5, 90, 'saving_per_year_vs_no_cap'), C(max(usage), 5, 90, 'saving_per_year_vs_no_cap')
+lo, hi = C(min(usage), 3, 90, 'saving_per_year_vs_no_cap'), C(max(usage), 3, 90, 'saving_per_year_vs_no_cap')
+flo, fhi = C(min(usage), 5, 90, 'saving_per_year_vs_no_cap'), C(max(usage), 5, 90, 'saving_per_year_vs_no_cap')
 
 financial = f"""We estimate what battery wear costs a phone owner each year, and how much a 90% charge cap saves. The battery lives come from the KIT measurements at 25°C (Table 1 of our methods report). Only one input comes from outside the data: a ${f['price_usd']:.0f} battery replacement fee (Burkhardt, 2024).
 
 The calculation is simple arithmetic. Yearly wear cost = replacement price × cycles used per year ÷ cycles the battery lasts. A battery that lasts 1,000 cycles, used once a day, is used up at 365/1,000 of a battery per year, which costs about $36 a year. We do not know how many full cycles a typical owner uses, so we show 0.5, 1 and 1.5 cycles per day as scenarios rather than claiming one value. The formula is proportional, so a higher replacement fee, such as a Pro model's, raises every cost and saving by the same percentage.
 
-At one full charge a day, capping saves the most for fast chargers: wear cost falls from {money(C(1.0,5,100))} to {money(C(1.0,5,90))} a year, a saving of {money(C(1.0,5,90,'saving_per_year_vs_no_cap'))} (Table 2, Figure 1). Across our usage scenarios, that saving ranges from {money(lo)} to {money(hi)} a year. For 1C charging, the saving is {money(C(1.0,3,90,'saving_per_year_vs_no_cap'))} a year; for slow 1/3C charging it is at least {money(C(1.0,1,90,'saving_per_year_vs_no_cap'))}, since capped slow-charged cells never wore out during testing. The cap costs nothing to implement as a software setting. Its trade-off is about 10% less charge available each day.
+Our main estimate uses 1C charging, where all six cells clearly wore past 80% before testing ended, so every battery life is a measured value. At one full charge a day, capping cuts wear cost from {money(C(1.0,3,100))} to {money(C(1.0,3,90))} a year, saving {money(C(1.0,3,90,'saving_per_year_vs_no_cap'))} (Table 2, Figure 1). Across our usage scenarios, the saving is {money(lo)} to {money(hi)} a year. The cap costs nothing to implement as a software setting; its trade-off is about 10% less charge available each day.
 
-These numbers have limits. They count cycling wear only; real batteries also age with time, so very long lives (over about five years) overstate the benefit. The fast-charging baseline rests on three cells that stopped on equipment errors. And the KIT cells are cylindrical 3 Ah cells, not phone batteries. We therefore recommend offering a 90% charge cap as a default for users who fast-charge, and confirming the savings on real phone batteries before promising a dollar figure."""
+Fast charging shows how large the benefit could be. At 5/3C, capping cuts wear cost from {money(C(1.0,5,100))} to {money(C(1.0,5,90))} a year, saving {money(C(1.0,5,90,'saving_per_year_vs_no_cap'))} ({money(flo)} to {money(fhi)} across usage scenarios). This figure is less certain: all three uncapped fast-charged cells stopped on equipment errors, and one had not yet reached 80%. For slow 1/3C charging the saving is at least {money(C(1.0,1,90,'saving_per_year_vs_no_cap'))}, since capped cells never wore out during testing.
+
+These numbers have limits. They count cycling wear only; real batteries also age with time, so very long lives (over about five years) overstate the benefit. And the KIT cells are cylindrical 3 Ah cells, not phone batteries. We therefore recommend offering a 90% charge cap as a default, especially for users who fast-charge, and confirming the savings on real phone batteries before promising a dollar figure."""
 
 fin = [("Financial Impacts", financial,
         [("table", f"Table 2. Yearly battery wear cost at 25°C, one full cycle per day, ${f['price_usd']:.0f} replacement.",

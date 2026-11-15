@@ -2,7 +2,7 @@
 
 A Six Sigma (DMAIC) project on how charging habits affect battery life, using the KIT battery aging dataset. We compare 72 lithium-ion cells tested at 3 charge rates, 2 charge limits (90% and 100%) and 4 temperatures. Results are direct measurements and simple arithmetic; there is no fitted statistical model.
 
-**Main finding:** charging to 90% instead of 100% gave more cycles before the battery fell to 80% capacity in all 12 rate–temperature combinations tested. The gain was largest for fast charging. Cold plus fast charging was the most damaging condition.
+**Main finding:** charging to 90% instead of 100% gave more cycles before the battery fell to 80% capacity in 11 of 12 rate–temperature combinations, and fewer in none. The twelfth can't be decided because its uncapped cells stopped early on equipment errors. The gain was largest for fast charging. Cold plus fast charging was the most damaging condition.
 
 ## Deliverables
 

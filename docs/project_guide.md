@@ -18,7 +18,7 @@ This guide explains the ideas behind the project and walks through it as a Six S
 
 ## Why batteries wear out: three mechanisms
 
-1. **High voltage stress.** A cell sitting near 100% is at its highest voltage. That speeds up side reactions which permanently use up lithium and damage the electrodes. Capping at 90% avoids the most stressful part of each cycle. In our data, this is why the cap helps in every condition.
+1. **High voltage stress.** A cell sitting near 100% is at its highest voltage. That speeds up side reactions which permanently use up lithium and damage the electrodes. Capping at 90% avoids the most stressful part of each cycle. In our data, this is why the cap helps in every condition we could compare.
 2. **Lithium plating.** When a cell is charged fast, lithium ions arrive at the negative electrode faster than they can move inside it. Some of them deposit as metallic lithium on the surface instead, and much of that lithium is lost for good. Cold makes the electrode slower to absorb lithium, so **fast charging in the cold** is the worst case. In our data, cells at 0°C charged at 5/3C wear out within tens of cycles.
 3. **Heat-driven aging.** Heat speeds up all chemical reactions, including the slow ones that age a battery. That is why slow-charged cells last *less* at 40°C than at 25°C. But heat also makes lithium plating less likely, so for *fast* charging, 40°C beats 25°C. The two effects pull in opposite directions, and our results show both.
 
@@ -45,8 +45,8 @@ A fourth effect, **calendar aging** (aging with time even when unused), is not p
 
 ### Improve
 - **Change tested:** charge to 90% instead of 100%, and charge more slowly when possible.
-- **Evidence:** the cap gives more cycles in every rate–temperature pair tested. The biggest gains are for fast charging.
-- **Value:** yearly battery wear cost, which is replacement price × cycles used per year ÷ battery life. This is shown for several daily-usage scenarios (`outputs/tables/cost_per_year.csv`).
+- **Evidence:** the cap gives more cycles in 11 of 12 rate–temperature pairs and fewer in none; the twelfth can't be decided because its uncapped cells stopped early. The result holds with 70% instead of 80% as the end-of-life point. The biggest gains are for fast charging.
+- **Value:** yearly battery wear cost, which is replacement price × cycles used per year ÷ battery life. This is shown for several daily-usage scenarios (`outputs/tables/cost_per_year.csv`). The main estimate uses 1C charging, where every cell's life was measured; fast charging is a second, less certain example.
 
 ### Control
 How the gain would be held in practice:
