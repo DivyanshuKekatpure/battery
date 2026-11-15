@@ -1,22 +1,22 @@
 {
   "Measures": {
-    "prose": 123,
-    "with_tables_and_captions": 123
+    "prose": 152,
+    "with_tables_and_captions": 152
   },
   "Assumptions": {
     "prose": 106,
     "with_tables_and_captions": 106
   },
   "Model / approach": {
-    "prose": 138,
-    "with_tables_and_captions": 138
+    "prose": 229,
+    "with_tables_and_captions": 229
   },
   "Results": {
-    "prose": 402,
-    "with_tables_and_captions": 571
+    "prose": 392,
+    "with_tables_and_captions": 561
   },
   "Financial Impacts": {
-    "prose": 368,
-    "with_tables_and_captions": 418
+    "prose": 381,
+    "with_tables_and_captions": 464
   }
 }
